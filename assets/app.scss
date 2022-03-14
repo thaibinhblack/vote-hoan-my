@@ -1,0 +1,108 @@
+
+.btn__p100 {
+  width: 100%;
+}
+
+
+.border {
+  border: 1px solid #1d2124;
+}
+
+//Color list
+$primary-color: #17C1C2;
+//
+
+.tieu-de-bang {
+  background-color: $primary-color;
+  color: #ffffff;
+}
+
+.level-1 {
+  background-color: #000000;
+  color: #f0f0f0;
+}
+
+.level-2 {
+  background-color: #A50021;
+  color: #f0f0f0;
+}
+
+.level-3 {
+  background-color: #B60000;
+  color: #f0f0f0;
+}
+
+.level-4 {
+  background-color: #FF6600;
+  color: #000000;
+}
+
+.level-5 {
+  background-color: #FFFF00;
+  color: #000000;
+}
+
+/* vuetify  table css*/
+
+.my-table thead th {
+  background-color: $primary-color;
+  color: #ffffff !important;
+
+  &:first-child {
+    border-radius: 10px 0 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 10px 0 0;
+  }
+}
+
+/* vuetify  table css*/
+
+.styled-table {
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-color: $primary-color;
+}
+
+.styled-table thead tr {
+  background-color: $primary-color;
+  color: #ffffff;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.styled-table th,
+.styled-table td {
+  padding-top: 5px;
+  padding-left: 5px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid $primary-color;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: $primary-color;
+}
+
+//tree

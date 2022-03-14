@@ -1,0 +1,22 @@
+#######################################
+# web: Hoàn Mỹ hmdl-inventory-management-web
+#######################################
+version: "3.5"
+
+services:
+  hmdl-inventory-management-web:
+    image: registry.gitlab.com/hmc-dev/hm-tool-83-tieu-chi-web:latest
+    container_name: hm83-web
+    restart: always
+    ports:
+      - "3001:3001"
+    command:
+      "npm run start"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+    external: true
+    name: backend-network
