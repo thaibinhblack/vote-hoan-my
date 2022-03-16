@@ -1,74 +1,74 @@
-# do not use "latest" here, if you want this to work in the future
-image: docker:19
-
-variables:
-  REGISTRY_IMAGE_INFO: 'hmc-dev/hm-vote-for-safety-web'
-  SSH_USER: 'root'
-  SSH_SERVER_IP: '10.20.9.68'
-  PATH_PROJECT: 'service/hm-vote-for-safety/web'
-  CI_REGISTRY: 'registry.gitlab.com'
-  CI_REGISTRY_USER: 'hoanmy'
-  CI_REGISTRY_TOKEN: 'onYD58FtUXMuis8SXgyR'
-
-services:
-  - docker:dind
-
-stages:
-  - build
-  - deploy
-  - cleanup
-
-build:
-  stage: build
-  script:
-    - docker build --cache-from $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest --tag $CI_REGISTRY/$REGISTRY_IMAGE_INFO:$CI_COMMIT_SHA --tag $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest .
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_TOKEN $CI_REGISTRY
-    - docker push $CI_REGISTRY/$REGISTRY_IMAGE_INFO:$CI_COMMIT_SHA
-    - docker push $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest
-  only:
-    - master
-
-deploy_prod:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: none
-  before_script:
-    - apk update && apk add openssh-client bash
-  script:
-    # chạy ssh-agent tương ứng với Gitlab Runner hiện tại
-    - eval $(ssh-agent -s)
-
-    # thêm nội dung của biến SSH_PRIVATE_KEY vào agent store
-    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
-
-    # tạo folder ~/.ssh
-    - mkdir -p ~/.ssh
-
-    # Scan lấy SSH Host key cho địa chỉ IP server
-    # Được kết quả bao nhiêu thì thêm vào file known_hosts
-    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
-
-    # Sửa lại quyền của file known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-
-    # Thực hiện SSH vào server, login vào Registry, chuyển tới folder project
-    # Down project, pull image về, up project và xoá đi image cũ
-    - >
-      ssh $SSH_USER@$SSH_SERVER_IP
-      "
-        docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_TOKEN} ${CI_REGISTRY};
-        cd $PATH_PROJECT;
-        docker-compose pull;
-        docker-compose down;
-        docker-compose up -d;
-        docker image prune -f;
-      "
-  only:
-    - master
-cleanup_job:
-  only:
-    - master
-  stage: cleanup
-  script:
-    - docker system prune -af
-  when: always
+## do not use "latest" here, if you want this to work in the future
+#image: docker:19
+#
+#variables:
+#  REGISTRY_IMAGE_INFO: 'hmc-dev/hm-vote-for-safety-web'
+#  SSH_USER: 'root'
+#  SSH_SERVER_IP: '10.20.9.68'
+#  PATH_PROJECT: 'service/hm-vote-for-safety/web'
+#  CI_REGISTRY: 'registry.gitlab.com'
+#  CI_REGISTRY_USER: 'hoanmy'
+#  CI_REGISTRY_TOKEN: 'onYD58FtUXMuis8SXgyR'
+#
+#services:f
+#  - docker:dind
+#
+#stages:
+#  - build
+#  - deploy
+#  - cleanup
+#
+#build:
+#  stage: build
+#  script:
+#    - docker build --cache-from $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest --tag $CI_REGISTRY/$REGISTRY_IMAGE_INFO:$CI_COMMIT_SHA --tag $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest .
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_TOKEN $CI_REGISTRY
+#    - docker push $CI_REGISTRY/$REGISTRY_IMAGE_INFO:$CI_COMMIT_SHA
+#    - docker push $CI_REGISTRY/$REGISTRY_IMAGE_INFO:latest
+#  only:
+#    - master
+#
+#deploy_prod:
+#  stage: deploy
+#  variables:
+#    GIT_STRATEGY: none
+#  before_script:
+#    - apk update && apk add openssh-client bash
+#  script:
+#    # chạy ssh-agent tương ứng với Gitlab Runner hiện tại
+#    - eval $(ssh-agent -s)
+#
+#    # thêm nội dung của biến SSH_PRIVATE_KEY vào agent store
+#    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+#
+#    # tạo folder ~/.ssh
+#    - mkdir -p ~/.ssh
+#
+#    # Scan lấy SSH Host key cho địa chỉ IP server
+#    # Được kết quả bao nhiêu thì thêm vào file known_hosts
+#    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+#
+#    # Sửa lại quyền của file known_hosts
+#    - chmod 644 ~/.ssh/known_hosts
+#
+#    # Thực hiện SSH vào server, login vào Registry, chuyển tới folder project
+#    # Down project, pull image về, up project và xoá đi image cũ
+#    - >
+#      ssh $SSH_USER@$SSH_SERVER_IP
+#      "
+#        docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_TOKEN} ${CI_REGISTRY};
+#        cd $PATH_PROJECT;
+#        docker-compose pull;
+#        docker-compose down;
+#        docker-compose up -d;
+#        docker image prune -f;
+#      "
+#  only:
+#    - master
+#cleanup_job:
+#  only:
+#    - master
+#  stage: cleanup
+#  script:
+#    - docker system prune -af
+#  when: always
