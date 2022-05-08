@@ -105,6 +105,10 @@ export default {
     }
   },
 
+  data: () => ({
+    text: ''
+  }),
+
   computed: {
     configTitle () {
       return this.config.title || false
