@@ -1,0 +1,154 @@
+[
+  {
+    "dapan_id": 1,
+    "cauhoi_id": 1,
+    "stt_dapan": 1,
+    "ten_dapan": "Ban lãnh đạo đơn vị Bệnh Viện",
+    "value_dapan": 15,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 2,
+    "cauhoi_id": 1,
+    "stt_dapan": 2,
+    "ten_dapan": "Trưởng/Phó Khoa, Trưởng/Phó Phòng, Trưởng/Phó đơn vị, Điều dưỡng trưởng khoa đơn vị",
+    "value_dapan": 16,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 3,
+    "cauhoi_id": 1,
+    "stt_dapan": 3,
+    "ten_dapan": "Bác sĩ",
+    "value_dapan": 5,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 4,
+    "cauhoi_id": 1,
+    "stt_dapan": 4,
+    "ten_dapan": "Bác sĩ vật lý trị liệu & Phục hồi chức năng",
+    "value_dapan": 10,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 5,
+    "cauhoi_id": 1,
+    "stt_dapan": 5,
+    "ten_dapan": "Bác sĩ tâm lý",
+    "value_dapan": 11,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 6,
+    "cauhoi_id": 1,
+    "stt_dapan": 6,
+    "ten_dapan": "Bác sĩ hô hấp",
+    "value_dapan": 12,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 7,
+    "cauhoi_id": 1,
+    "stt_dapan": 7,
+    "ten_dapan": "Bác sĩ điêu dưỡng",
+    "value_dapan": 8,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 8,
+    "cauhoi_id": 1,
+    "stt_dapan": 8,
+    "ten_dapan": "Điều dưỡng viên trình độ thạc sĩ",
+    "value_dapan": 1,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 9,
+    "cauhoi_id": 1,
+    "stt_dapan": 9,
+    "ten_dapan": "Điều dưỡng viên trình độ đại học / cao đẳng",
+    "value_dapan": 2,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 10,
+    "cauhoi_id": 1,
+    "stt_dapan": 10,
+    "ten_dapan": "Điều dưỡng viên trình độ trung học",
+    "value_dapan": 3,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 11,
+    "cauhoi_id": 1,
+    "stt_dapan": 11,
+    "ten_dapan": "Kỹ thuật viên (XN, CĐHA, Đo điện tâm đồ, đo chức năng hô hấp, VLTL & PHCN)",
+    "value_dapan": 14,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 12,
+    "cauhoi_id": 1,
+    "stt_dapan": 12,
+    "ten_dapan": "Dược sĩ",
+    "value_dapan": 9,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 13,
+    "cauhoi_id": 1,
+    "stt_dapan": 13,
+    "ten_dapan": "Chuyên viên",
+    "value_dapan": 17,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 14,
+    "cauhoi_id": 1,
+    "stt_dapan": 14,
+    "ten_dapan": "Nhân viên",
+    "value_dapan": 18,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 14,
+    "cauhoi_id": 1,
+    "stt_dapan": 14,
+    "ten_dapan": "Kỹ sư",
+    "value_dapan": 19,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 15,
+    "cauhoi_id": 1,
+    "stt_dapan": 15,
+    "ten_dapan": "Thư ký",
+    "value_dapan": 20,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 16,
+    "cauhoi_id": 1,
+    "stt_dapan": 16,
+    "ten_dapan": "Mục khác",
+    "value_dapan": 99,
+    "type_value_dapan": "text"
+  },
+  {
+    "dapan_id": 17,
+    "cauhoi_id": 2,
+    "stt_dapan": 1,
+    "ten_dapan": "Nhiều khoa phòng không nơi nào là chính",
+    "value_dapan": 1,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 18,
+    "cauhoi_id": 2,
+    "stt_dapan": 2,
+    "ten_dapan": "Khoa thuộc khối Nội",
+    "value_dapan": 3,
+    "type_value_dapan": "number"
+  }
+]

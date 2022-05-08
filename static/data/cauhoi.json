@@ -1,0 +1,92 @@
+[
+  {
+    "cauhoi_id": 1,
+    "phancauhoi_id": 1,
+    "stt_cauhoi": 1,
+    "ten_cauhoi": "Chức danh công tác của anh/chị trong bệnh viện?",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 2,
+    "phancauhoi_id": 1,
+    "stt_cauhoi": 2,
+    "ten_cauhoi": "Khoa/Phòng làm việc chính của Anh/Chị trong bệnh viện này?",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 3,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 1,
+    "ten_cauhoi": "Tại khoa/phòng/đơn vị của tôi, mọi người làm việc nhóm cùng nhau hiệu quả.",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 4,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 2,
+    "ten_cauhoi": "Tại khoa/phòng/đơn vị của tôi, có đủ người để xử lý khối lượng công việc",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 5,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 3,
+    "ten_cauhoi": "Nhân viên trong khoa/phòng/đơn vị của tôi phải làm việc nhiều thời gian hơn qui định để có thể chăm sóc người bệnh tốt nhất. ",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 6,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 4,
+    "ten_cauhoi": "Tại khoa/phòng/đơn vị của tôi thường xuyên xem xét các quy trình làm việc nhằm xác định vấn đề cần thay đổi để cải thiện an toàn cho người bệnh. ",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 7,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 5,
+    "ten_cauhoi": "Khoa/phòng/đơn vị của tôi phụ thuộc quá nhiều vào nhân viên hợp tác, bán thời gian, thời vụ…",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 8,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 6,
+    "ten_cauhoi": "Trong khoa/phòng/đơn vị của tôi, nhân viên cảm thấy sai sót của họ là bằng chứng chống đối lại họ",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  },
+  {
+    "cauhoi_id": 9,
+    "phancauhoi_id": 2,
+    "stt_cauhoi": 7,
+    "ten_cauhoi": "Khi có một sự cố được báo cáo trong khoa/phòng/đơn vị của tôi, một cá nhân có liên quan sự cố sẽ được nhắc nhở chứ không phải một vấn đề được nêu ra để phân tích nguyên nhân vì sao sự cố xảy ra",
+    "tamngung": 0,
+    "thuan_nghich": 0,
+    "ma_cauhoi_qhlq": null,
+    "ten_cauhoi_qh_lq": null
+  }
+]
