@@ -51,6 +51,10 @@
               :title="answer.label"
             ></v-radio>
           </v-radio-group>
+          <v-text-field
+            v-if="value === 99"
+            v-model="text"
+          />
         </ul>
 
         <div class="box-form__remove-answer">
@@ -100,6 +104,10 @@ export default {
       default: () => ({})
     }
   },
+
+  data: () => ({
+    text: ''
+  }),
 
   computed: {
     configTitle () {

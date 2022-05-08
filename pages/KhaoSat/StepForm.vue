@@ -7,9 +7,8 @@
         :key="index"
         class="step-form__item --border"
         v-bind="item"
-        v-model="steps[stepActive][index].answer"
-      />
-
+        v-model="answer[index]"
+      />  
       <div class="step-form__footer">
         <button
           v-if="stepActive > 0"
@@ -27,11 +26,33 @@
         </button>
       </div>
     </div>
+
+    <div class="step-form__flowing">
+      <div
+        class="step-form__item-flowing"
+        v-for="({ label, id}, index) in LIST_LABEL"
+        :key="index"  
+      >
+        <div class="step-form__title-flowing step-form__flowing-txt">
+          {{ label }}
+        </div>
+        <div class="step-form__question-container">
+          <div
+            v-for="({ stt_cauhoi }, index) in listCauHoiByID(id)"
+            :key="index"
+            class="step-form__question-item step-form__flowing-txt"
+          >
+            {{ stt_cauhoi }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import BoxForm from './components/BoxForm.vue'
+import {mapState, mapActions, mapGetters} from "vuex"
 
 export default {
   components: {
@@ -41,459 +62,132 @@ export default {
   name: 'StepForm',
 
   data: () => ({
-    steps: [
-      [
-        {
-          title: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
-          description: 'Bản dịch được sự cho phép của Tổ chức AHRQ tại Mỹ (the United States Agency for Healthcare Research and Quality',
-          config: {
-            border: true,
-            title: {
-              medium: true
-            }
-          }
-        },
-        {
-          description: 'Bình chọn này nhằm thăm dò ý kiến của bạn về các vấn đề an toàn của người bệnh, sự cố và báo cáo sự cố tại Khoa/Phòng/ Đơn vị và Bệnh viện/Phòng khám của Anh/Chị. Để hoàn thành bình chọn này, Anh/Chị chỉ mất khoảng 10-15 phút. Nếu một câu hỏi không áp dụng đối với Khoa/Phòng/Đơn vị hoặc Bệnh viện/Phòng khám của Anh/Chị hoặc Anh/Chị không biết câu trả lời, vui lòng chọn “Không áp dụng hoặc không biết”.',
-          config: {
-            description: {
-              heading: true
-            }
-          }
-        },
-        {
-          title: 'Định nghĩa',
-          description: '<li>“An toàn người bệnh”: được định nghĩa là sự phòng ngừa và tránh khỏi những tổn thương cho người bệnh do quá trình chăm sóc sức khỏe gây ra.</li><li>“Sự cố an toàn người bệnh” được định nghĩa là bất kỳ loại lỗi liên quan đến chăm sóc sức khỏe, nhầm lẫn hoặc sự cố, bất kể điều đó có gây hại hay không.</li>',
-          config: {
-            description: {
-              small: true
-            }
-          }
-        }
-      ],
-      [
-        {
-          title: 'VỊ TRÍ CÔNG VIỆC CỦA ANH/CHỊ',
-          description: 'Lưu ý: Con số đứng trước mỗi chức danh trong câu trả lời bên dưới được hiểu là mã số qui ước dựa trên phiên bản của tổ chức AHRQ',
-          config: {
-            title: {
-              background: true
-            },
-            description: {
-              small: true
-            }
-          }
-        },
-        {
-          question: {
-            number: 1,
-            title: 'Tại khoa/phòng/đơn vị của tôi, mọi người làm việc nhóm cùng nhau hiệu quả.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 2,
-            title: 'Tại khoa/phòng/đơn vị của tôi, có đủ người để xử lý khối lượng công việc.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 3,
-            title: 'Nhân viên trong khoa/phòng/đơn vị của tôi phải làm việc nhiều thời gian hơn qui định để có thể chăm sóc người bệnh tốt nhất.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 4,
-            title: 'Khoa/phòng/đơn vị của tôi thường xuyên xem xét các quy trình làm việc nhằm xác định vấn đề cần thay đổi để cải thiện an toàn cho người bệnh.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 5,
-            title: 'Khoa/phòng/đơn vị của tôi phụ thuộc quá nhiều vào nhân viên hợp tác, bán thời gian, thời vụ',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 6,
-            title: 'Trong khoa/phòng/đơn vị của tôi, nhân viên cảm thấy sai sót của họ là bằng chứng chống đối lại họ.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 7,
-            title: 'Khi có một sự cố được báo cáo trong khoa/phòng/đơn vị của tôi, một cá nhân có liên quan sự cố sẽ được nhắc nhở chứ không phải một vấn đề được nêu ra để phân tích nguyên nhân vì sao sự cố xảy ra.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 8,
-            title: 'Nhân viên trong khoa/phòng/đơn vị của tôi giúp đỡ lẫn nhau khi bận rộn',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 9,
-            title: 'Những người làm việc trong khoa/phòng/đơn vị của tôi có hành vi thiếu tôn trọng người khác.  ',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 10,
-            title: 'Khi nhân viên mắc sai sót, khoa/phòng/đơn vị của tôi tập trung vào việc học hỏi/rút kinh nghiệm được gì từ sự cố này hơn là đổ lỗi cho một người nào đó.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 11,
-            title: 'Cường độ làm việc tại khoa/phòng/đơn vị của tôi gấp rút nên ảnh hưởng tiêu cực đến sự an toàn của người bệnh.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 12,
-            title: 'Tại khoa/phòng/đơn vị của tôi, sau khi thực hiện các thay đổi để cải tiến an toàn người bệnh, có tiến hành đánh giá lại hiệu quả của các can thiệp thay đổi.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 13,
-            title: 'Nhân viên ở khoa/phòng/đơn vị của tôi khi có liên quan đến sai sót về an toàn người bệnh không được nhận hỗ trợ.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        },
-        {
-          question: {
-            number: 14,
-            title: 'Khoa/phòng/đơn vị của tôi để các vấn liên quan đến an toàn người bệnh tương tự tiếp tục xảy ra.',
-            answers: [
-              {
-                label: 'Rất không đồng ý',
-                value: 9
-              },
-              {
-                label: 'Không đồng ý',
-                value: 3,
-              },
-              {
-                label: 'Đồng ý',
-                value: 2
-              },
-              {
-                label: 'Rất đồng ý',
-                value: 1
-              },
-              {
-                label: 'Không áp dụng hoặc không biết',
-                value: 0
-              }
-            ]
-          }
-        }
-      ]
-    ],
     stepActive: 0,
+    answer: [],
+    answers: []
   }),
 
   computed: {
+    ...mapState('cauHoi', ['list']),
+    ...mapState('phienBanKhaoSat', ['data']),
+    ...mapState('dapanCauHoi', ['dapan']),
+    ...mapGetters('phanCauHoi', ['LIST_LABEL']),
+
+    stepsCauHoi () {
+      return this.$store.state.phanCauHoi.list.reduce((arr, key) => ([
+        ...arr,
+        [
+          {
+            title: key.ten_cauhoi,
+            description: key.mota_cauhoi,
+            config: {
+              border: true,
+              title: {
+                background: true
+              }
+            }
+          },
+          ...this.list.filter((item) => item.phancauhoi_id === key.phan_cauhoi_id).reduce((arr, key) => ([
+            ...arr,
+            {
+              question: {
+                number: key.stt_cauhoi,
+                title: key.ten_cauhoi,
+                answers: [
+                  ...this.dapan.filter((item) => item.cauhoi_id === key.cauhoi_id).reduce((arr, da) => ([
+                    ...arr,
+                    {
+                      label: da.ten_dapan,
+                      value: da.value_dapan
+                    }
+                  ]), [])
+                ]
+              }
+            }
+          ]), [])
+        ]
+      ]), [])
+    },
+
+    steps () {
+      return [
+        [
+          {
+            title: this.data.tieude_khaosat || '',
+            description: this.data.mota_khaosat || '',
+            config: {
+              border: true,
+              title: {
+                medium: true
+              }
+            }
+          },
+          {
+            description: 'Bình chọn này nhằm thăm dò ý kiến của bạn về các vấn đề an toàn của người bệnh, sự cố và báo cáo sự cố tại Khoa/Phòng/ Đơn vị và Bệnh viện/Phòng khám của Anh/Chị. Để hoàn thành bình chọn này, Anh/Chị chỉ mất khoảng 10-15 phút. Nếu một câu hỏi không áp dụng đối với Khoa/Phòng/Đơn vị hoặc Bệnh viện/Phòng khám của Anh/Chị hoặc Anh/Chị không biết câu trả lời, vui lòng chọn “Không áp dụng hoặc không biết”.'
+          },
+        ],
+        ...this.stepsCauHoi
+      ]
+    },
+
     boxs() {
       return this.steps[this.stepActive] 
     }
   },
 
+  watch: {
+    stepActive (newData, oldData) {
+      this.answer = this.answers[newData] || []
+      console.log('watch', this.answer, this.answers)
+    }
+  },
+
+  created () {
+    Promise.all([
+      this.fetchList(),
+      this.fetchKhaoSat(),
+      this.fetchListCauhoi(),
+      this.fetchDapAn()
+    ])
+  },  
+
   methods: {
+    ...mapActions('phanCauHoi', ['fetchList']),
+    ...mapActions('cauHoi', ['fetchListCauhoi']),
+    ...mapActions('phienBanKhaoSat', ['fetchKhaoSat']),
+    ...mapActions('dapanCauHoi', ['fetchDapAn']),
+
     onNext () {
+      this.updateAnswers()
       this.stepActive += 1
     },
 
     onBack () {
+      this.updateAnswers()
       this.stepActive = this.stepActive === 0 ? 0 : (this.stepActive - 1)
+    },
+
+    updateAnswers () {
+       this.answers = this.answers[this.stepActive]
+      ? [
+        ...this.answers.reduce((arr, key, index) => (
+          [
+            ...arr,
+            index === this.stepActive ? this.answer : key
+            
+          ]
+        ), [])
+      ]
+      : [
+        ...this.answers,
+        [
+          ...this.answer
+        ]
+      ]
+    },
+
+    listCauHoiByID (id) {
+      return this.list.filter((item) => item.phancauhoi_id === id)
     }
   }
 }
@@ -533,6 +227,47 @@ export default {
       background: #fff;
       color: rgb(87, 129, 76);
       font-size: 14px;
+    }
+
+    &__flowing {
+      top: 150px;
+      right: 150px;
+      position: fixed;
+      background: #fff;
+      z-index: 999;
+      width: 250px;
+    }
+
+    &__flowing-txt {
+      padding: 5px;
+    }
+
+    &__title-flowing {
+      display: block;
+      width: 100%;
+      background: #e2e2e2;
+      padding-left: 25px;
+    }
+
+    &__question-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      border: 1px solid #e2e2e2;
+    }
+
+    &__question-item {
+      border: 1px solid #e2e2e2;
+      text-align: center;
+      width: 20%;
+      cursor: pointer;
+      border-left: none;
+
+      &.\--success {
+        background-color: #0090a1;
+        border-color: #0090a1;
+        color: #fff;
+      }
     }
   }
 </style>
