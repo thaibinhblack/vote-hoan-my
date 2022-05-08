@@ -1,14 +1,6 @@
 <template>
   <v-container :fluid="!$vuetify.breakpoint.mobile">
-
-    <v-img
-      class="logo-hm83"
-      src="/img/2021-07-20_16-13-23.png"
-      contain
-      max-height="500"
-      max-width="800"
-    />
-
+    <step-form />
   </v-container>
 </template>
 <style scoped>
@@ -22,9 +14,13 @@
 }
 </style>
 <script>
-
+import StepForm from './KhaoSat/StepForm.vue'
 
 export default {
+  components: {
+    StepForm
+  },
+
   middleware: "auth",
   created() {
     this.$store.commit("setTilePage", "Trang chủ")
