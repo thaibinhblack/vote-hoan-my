@@ -39,7 +39,6 @@
 
           {{ question.title }}
         </div>
-
         <ul class="box-form__list-answer">
            <v-radio-group v-model="answer">
             <v-radio
@@ -48,18 +47,17 @@
               :key="index"
               :label="answer.label"
               :value="answer.value"
-              :title="answer.label"
-            ></v-radio>
+            />
           </v-radio-group>
           <v-text-field
-            v-if="value === 99"
+            v-if="answer === 99"
             v-model="text"
           />
         </ul>
 
         <div class="box-form__remove-answer">
           <span
-            v-if="value !== null"
+            v-if="!!answer"
             @click="onRemove"
             class="box-form__btn-remove"
           >
@@ -78,7 +76,7 @@ export default {
 
   props: {
     value: {
-      default: null
+      default: () => ({})
     },
     config: {
       type: Object,
@@ -102,12 +100,13 @@ export default {
     question: {
       type: Object,
       default: () => ({})
+    },
+
+    id: {
+      type: Number,
+      default: 0
     }
   },
-
-  data: () => ({
-    text: ''
-  }),
 
   computed: {
     configTitle () {
@@ -118,13 +117,17 @@ export default {
       return this.config.description || false
     },
 
-    answer: {
+    text: {
       get () {
-        return this.value
+        return this.value.value_other || ''
       },
 
-      set (value) {
-        this.$emit('input', value)
+      set (data) {
+        console.log('set data', data, this.value)
+        this.$emit('input', {
+          ...this.value,
+          value_other: data
+        })
       }
     },
 
@@ -133,9 +136,28 @@ export default {
     }
   },
 
+  watch: {
+    value (data) {
+      this.answer = data.value
+    },
+
+    answer (value) {
+      this.$emit('input', {
+        ...this.value,
+        value,
+        value_other: '',
+        id: this.id
+      })
+    }
+  },
+
+  data: () => ({
+    answer: ''
+  }),
+
   methods: {
     onRemove () {
-      this.$emit('input', null)
+      this.$emit('input', {})
     }
   }
 }

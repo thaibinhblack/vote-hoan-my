@@ -49,48 +49,48 @@ export const actions = {
         giatri_cauhoi: 'B',
         phienban_id: 1
       },
-      {
-        phan_cauhoi_id: 4,
-        ten_cauhoi: 'PHẦN C: Ý KIẾN VỀ VẤN ĐỀ TRAO ĐỔI THÔNG TIN TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ. ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'C',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 5,
-        ten_cauhoi: 'PHẦN D: Ý KIẾN VỀ BÁO CÁO SỰ CỐ TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'C',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 6,
-        ten_cauhoi: 'PHẦN E: ĐÁNH GIÁ MỨC ĐỘ AN TOÀN',
-        mota_cauhoi: 'Đánh giá mức độ an toàn người bệnh tại khoa/phòng/đơn vị làm việc của Anh/Chị <br /> Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn',
-        giatri_cauhoi: 'C',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 7,
-        ten_cauhoi: 'PHẦN F: Ý KIẾN VỀ BỆNH VIỆN/PHÒNG KHÁM CỦA ANH/CHỊ',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'F',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 8,
-        ten_cauhoi: 'PHẦN G: THÔNG TIN CÁ NHÂN',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'G',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 9,
-        ten_cauhoi: 'PHẦN H: Ý KIẾN CÁ NHÂN',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'H',
-        phienban_id: 1
-      }
+      // {
+      //   phan_cauhoi_id: 4,
+      //   ten_cauhoi: 'PHẦN C: Ý KIẾN VỀ VẤN ĐỀ TRAO ĐỔI THÔNG TIN TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ. ',
+      //   mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
+      //   giatri_cauhoi: 'C',
+      //   phienban_id: 1
+      // },
+      // {
+      //   phan_cauhoi_id: 5,
+      //   ten_cauhoi: 'PHẦN D: Ý KIẾN VỀ BÁO CÁO SỰ CỐ TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ',
+      //   mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
+      //   giatri_cauhoi: 'D',
+      //   phienban_id: 1
+      // },
+      // {
+      //   phan_cauhoi_id: 6,
+      //   ten_cauhoi: 'PHẦN E: ĐÁNH GIÁ MỨC ĐỘ AN TOÀN',
+      //   mota_cauhoi: 'Đánh giá mức độ an toàn người bệnh tại khoa/phòng/đơn vị làm việc của Anh/Chị <br /> Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn',
+      //   giatri_cauhoi: 'E',
+      //   phienban_id: 1
+      // },
+      // {
+      //   phan_cauhoi_id: 7,
+      //   ten_cauhoi: 'PHẦN F: Ý KIẾN VỀ BỆNH VIỆN/PHÒNG KHÁM CỦA ANH/CHỊ',
+      //   mota_cauhoi: '',
+      //   giatri_cauhoi: 'F',
+      //   phienban_id: 1
+      // },
+      // {
+      //   phan_cauhoi_id: 8,
+      //   ten_cauhoi: 'PHẦN G: THÔNG TIN CÁ NHÂN',
+      //   mota_cauhoi: '',
+      //   giatri_cauhoi: 'G',
+      //   phienban_id: 1
+      // },
+      // {
+      //   phan_cauhoi_id: 9,
+      //   ten_cauhoi: 'PHẦN H: Ý KIẾN CÁ NHÂN',
+      //   mota_cauhoi: '',
+      //   giatri_cauhoi: 'H',
+      //   phienban_id: 1
+      // }
     ]
 
     dispatch('setList', result)
