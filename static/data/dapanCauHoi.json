@@ -150,5 +150,367 @@
     "ten_dapan": "Khoa thuộc khối Nội",
     "value_dapan": 3,
     "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 18,
+    "cauhoi_id": 2,
+    "stt_dapan": 3,
+    "ten_dapan": "Khoa thuộc khối Ngoại",
+    "value_dapan": 4,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 19,
+    "cauhoi_id": 2,
+    "stt_dapan": 4,
+    "ten_dapan": "Khoa Tim mạch",
+    "value_dapan": 5,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 20,
+    "cauhoi_id": 2,
+    "stt_dapan": 5,
+    "ten_dapan": "Khoa Khám bệnh, Cấp cứu, Lọc thận",
+    "value_dapan": 6,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 21,
+    "cauhoi_id": 2,
+    "stt_dapan": 6,
+    "ten_dapan": "Khoa Tiêu hóa",
+    "value_dapan": 7,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 22,
+    "cauhoi_id": 2,
+    "stt_dapan": 7,
+    "ten_dapan": "ICU",
+    "value_dapan": 8,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 22,
+    "cauhoi_id": 2,
+    "stt_dapan": 7,
+    "ten_dapan": "Phòng sinh, Sản phụ khoa",
+    "value_dapan": 9,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 23,
+    "cauhoi_id": 2,
+    "stt_dapan": 8,
+    "ten_dapan": "Khoa Nhi (bao gồm cả ICU)",
+    "value_dapan": 10,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 24,
+    "cauhoi_id": 2,
+    "stt_dapan": 8,
+    "ten_dapan": "Khoa Nhi (bao gồm cả ICU)",
+    "value_dapan": 11,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 24,
+    "cauhoi_id": 2,
+    "stt_dapan": 9,
+    "ten_dapan": "Khoa Tâm thần, sức khỏe hành vi",
+    "value_dapan": 12,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 25,
+    "cauhoi_id": 2,
+    "stt_dapan": 10,
+    "ten_dapan": "Khoa VLTL & PHCN",
+    "value_dapan": 14,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 26,
+    "cauhoi_id": 2,
+    "stt_dapan": 11,
+    "ten_dapan": "Khoa PT-HMHS",
+    "value_dapan": 16,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 27,
+    "cauhoi_id": 2,
+    "stt_dapan": 12,
+    "ten_dapan": "Giải phẫu bệnh; Xét nghiệm",
+    "value_dapan": 19,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 28,
+    "cauhoi_id": 2,
+    "stt_dapan": 13,
+    "ten_dapan": "Khoa Dược",
+    "value_dapan": 20,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 29,
+    "cauhoi_id": 2,
+    "stt_dapan": 14,
+    "ten_dapan": "Khoa CĐHA",
+    "value_dapan": 21,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 30,
+    "cauhoi_id": 2,
+    "stt_dapan": 15,
+    "ten_dapan": "Đo chức năng hô hấp",
+    "value_dapan": 22,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 31,
+    "cauhoi_id": 2,
+    "stt_dapan": 16,
+    "ten_dapan": "Bộ phận hành chính",
+    "value_dapan": 24,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 32,
+    "cauhoi_id": 2,
+    "stt_dapan": 17,
+    "ten_dapan": "Tài chính - Kế toán",
+    "value_dapan": 25,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 33,
+    "cauhoi_id": 2,
+    "stt_dapan": 18,
+    "ten_dapan": "Nhân sự - Đào tạo",
+    "value_dapan": 26,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 34,
+    "cauhoi_id": 2,
+    "stt_dapan": 19,
+    "ten_dapan": "IT; KHTH",
+    "value_dapan": 27,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 35,
+    "cauhoi_id": 2,
+    "stt_dapan": 20,
+    "ten_dapan": "QLCL; Quản trị rủi ro",
+    "value_dapan": 28,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 36,
+    "cauhoi_id": 2,
+    "stt_dapan": 21,
+    "ten_dapan": "Hành chính khoa",
+    "value_dapan": 23,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 37,
+    "cauhoi_id": 2,
+    "stt_dapan": 22,
+    "ten_dapan": "Nhận bệnh, Đăng ký, CSKH",
+    "value_dapan": 29,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 38,
+    "cauhoi_id": 2,
+    "stt_dapan": 23,
+    "ten_dapan": "Bếp ăn, Phục vụ suất ăn, Dinh dưỡng",
+    "value_dapan": 30,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 39,
+    "cauhoi_id": 2,
+    "stt_dapan": 24,
+    "ten_dapan": "TBYT, M&E, Bộ phận vệ sinh",
+    "value_dapan": 31,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 40,
+    "cauhoi_id": 2,
+    "stt_dapan": 25,
+    "ten_dapan": "Bảo vệ",
+    "value_dapan": 32,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 41,
+    "cauhoi_id": 2,
+    "stt_dapan": 26,
+    "ten_dapan": "Tài xế",
+    "value_dapan": 33,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 42,
+    "cauhoi_id": 2,
+    "stt_dapan": 27,
+    "ten_dapan": "Khác",
+    "value_dapan": 99,
+    "type_value_dapan": "text"
+  },
+  {
+    "dapan_id": 43,
+    "cauhoi_id": 3,
+    "stt_dapan": 1,
+    "ten_dapan": "Rất không đồng ý",
+    "value_dapan": 1,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 44,
+    "cauhoi_id": 3,
+    "stt_dapan": 2,
+    "ten_dapan": "Không đồng ý",
+    "value_dapan": 2,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 45,
+    "cauhoi_id": 3,
+    "stt_dapan": 2,
+    "ten_dapan": "Không ý kiến",
+    "value_dapan": 3,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 46,
+    "cauhoi_id": 3,
+    "stt_dapan": 4,
+    "ten_dapan": "Đồng ý",
+    "value_dapan": 4,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 47,
+    "cauhoi_id": 3,
+    "stt_dapan": 5,
+    "ten_dapan": "Rất đồng ý",
+    "value_dapan": 5,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 48,
+    "cauhoi_id": 3,
+    "stt_dapan": 6,
+    "ten_dapan": "Không áp dụng hoặc không biết",
+    "value_dapan": 9,
+    "type_value_dapan": "number"
+  },
+
+  {
+    "dapan_id": 49,
+    "cauhoi_id": 4,
+    "stt_dapan": 1,
+    "ten_dapan": "Rất không đồng ý",
+    "value_dapan": 1,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 50,
+    "cauhoi_id": 4,
+    "stt_dapan": 2,
+    "ten_dapan": "Không đồng ý",
+    "value_dapan": 2,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 51,
+    "cauhoi_id": 4,
+    "stt_dapan": 2,
+    "ten_dapan": "Không ý kiến",
+    "value_dapan": 3,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 52,
+    "cauhoi_id": 4,
+    "stt_dapan": 4,
+    "ten_dapan": "Đồng ý",
+    "value_dapan": 4,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 53,
+    "cauhoi_id": 4,
+    "stt_dapan": 5,
+    "ten_dapan": "Rất đồng ý",
+    "value_dapan": 5,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 54,
+    "cauhoi_id": 4,
+    "stt_dapan": 6,
+    "ten_dapan": "Không áp dụng hoặc không biết",
+    "value_dapan": 9,
+    "type_value_dapan": "number"
+  },
+
+  {
+    "dapan_id": 55,
+    "cauhoi_id": 10,
+    "stt_dapan": 1,
+    "ten_dapan": "Rất không đồng ý",
+    "value_dapan": 1,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 56,
+    "cauhoi_id": 10,
+    "stt_dapan": 2,
+    "ten_dapan": "Không đồng ý",
+    "value_dapan": 2,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 57,
+    "cauhoi_id": 10,
+    "stt_dapan": 2,
+    "ten_dapan": "Không ý kiến",
+    "value_dapan": 3,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 58,
+    "cauhoi_id": 10,
+    "stt_dapan": 4,
+    "ten_dapan": "Đồng ý",
+    "value_dapan": 4,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 59,
+    "cauhoi_id": 11,
+    "stt_dapan": 5,
+    "ten_dapan": "Rất đồng ý",
+    "value_dapan": 5,
+    "type_value_dapan": "number"
+  },
+  {
+    "dapan_id": 60,
+    "cauhoi_id": 11,
+    "stt_dapan": 6,
+    "ten_dapan": "Không áp dụng hoặc không biết",
+    "value_dapan": 9,
+    "type_value_dapan": "number"
   }
 ]
