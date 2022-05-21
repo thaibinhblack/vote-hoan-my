@@ -36,7 +36,9 @@
     justify-content: space-between;
 
     @media (min-width: 991px) {
-      display: none;
+      button {
+        display: none;
+      }
     }
   }
 
@@ -71,6 +73,7 @@
   &__group-search {
     background-color: #f0f6fa;
     padding: 10px;
+    border-radius: 5px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -92,10 +95,14 @@
       display: block;
     }
 
-    @media (min-width) {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+    @media (min-width: 991px) {
+      width: auto;
+
+      & , &.\--show {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
     }
   }
 
