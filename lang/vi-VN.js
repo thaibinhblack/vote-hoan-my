@@ -146,7 +146,8 @@ export default {
     FilterTable: {
       create: 'Thêm mới',
       search: 'Tìm kiếm',
-      delete: 'Xóa'
+      delete: 'Xóa',
+      export: 'Xuất dữ liệu'
     },
     CustomTable: {
       edit: 'Chỉnh sửa',

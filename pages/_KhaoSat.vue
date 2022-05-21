@@ -73,6 +73,7 @@ import StepForm from './KhaoSat/StepForm.vue'
 import KhaoSatDetail from './KhaoSat/detail.vue'
 import {
   mapState,
+  mapGetters,
   mapActions
 } from 'vuex'
 
@@ -110,7 +111,8 @@ export default {
   }),
 
   computed: {
-    ...mapState('phienBanKhaoSat', ['list', 'fields', 'columns']),
+    ...mapState('phienBanKhaoSat', ['fields', 'columns']),
+    ...mapGetters('phienBanKhaoSat', ['list']),
 
     fieldsSearch () {
       return Object.entries(this.query).length === 0 ? this.fields : []
@@ -161,7 +163,8 @@ export default {
       } else {
         this.rolesFields = {
           create: true,
-          delete: true
+          delete: true,
+          export: true
         }
         this.fetchListKhaoSat()
       }

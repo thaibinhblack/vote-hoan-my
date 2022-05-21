@@ -108,5 +108,9 @@ $primary-color: #17C1C2;
 #__layout .el-button {
   padding: 10px 12px;
   font-size: 12px;
+
+  & i {
+    font-size: 13px !important;
+  }
 }
 //tree

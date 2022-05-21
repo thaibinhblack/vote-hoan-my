@@ -23,6 +23,15 @@
             {{ $t('components.FilterTable.create') }}
           </el-button>
 
+           <el-button
+            v-if="roles.export"
+            plain
+            type="success"
+            @click="onExport"
+          >
+            {{ $t('components.FilterTable.export') }}
+          </el-button>
+
           <el-button
             v-if="roles.delete"
             plain
@@ -165,6 +174,10 @@ export default {
 
     onDelete () {
       this.$emit('delete')
+    },
+
+    onExport () {
+      this.$emit('export')
     },
 
     onBack () {

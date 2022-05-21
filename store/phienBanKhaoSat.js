@@ -71,7 +71,7 @@ export const state = () => ({
     },
     {
       label: 'Trạng thái',
-      column: 'status_khaosat',
+      column: 'trang_thai_text',
       align: 'center',
     },
     {
@@ -89,7 +89,19 @@ export const state = () => ({
 })
 
 export const getters = {
-
+  list: (state) => {
+    return state.list.map(item => ({
+      ...item,
+      trang_thai_text: 
+        item.status_khaosat === 1
+        ? 'Đang hoạt động'
+        : (
+            item.status_khaosat === 2 
+            ? 'Ngừng hoạt động'
+            : 'Chưa cập nhật'
+          )
+    }))
+  }
 }
 
 export const mutations = {
@@ -102,6 +114,36 @@ export const mutations = {
   SET_LIST: (state, payload) => {
     state.list = [
       ...payload
+    ]
+  },
+
+  CREATE_DATA: (state, payload) => {
+    state.list = [
+      {
+        ...payload
+      },
+      ...state.list
+    ]
+  },
+
+  UPDATE_DATA: (state, payload) => {
+    state.list = [
+      ...state.list.reduce((arr, key) => {
+        arr = payload.phienban_id === key.phienban_id
+        ? [
+          ...arr,
+          {
+            ...payload
+          }
+        ]
+        : [
+          ...arr,
+          {
+            ...key
+          }
+        ]
+        return arr
+      }, [])
     ]
   }
 }
@@ -159,6 +201,17 @@ export const actions = {
     ]
 
     dispatch('setList', result)
+  },
+  
+  updatePhienBan: ({ commit }, payload) => {
+    commit('UPDATE_DATA', payload)
+  },
+  
+  createPhienBan: ({ commit, state }, payload) => {
+    const data = {
+      phienban_id: state.list.length + 1,
+      ...payload
+    }
+    commit('CREATE_DATA', data)
   }
-
 }
