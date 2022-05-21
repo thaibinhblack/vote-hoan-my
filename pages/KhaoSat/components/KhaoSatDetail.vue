@@ -3,6 +3,7 @@
     :title="title"
     :visible.sync="value"
     class="khao-sat-detail"
+    @close="onClose"
   >
     <el-form
       class="khao-sat-detail__form"
@@ -51,6 +52,13 @@ export default {
       } else {
         // this.$refs['form-khao-sat'].clear()
       }
+    }
+  },
+
+  methods: {
+    onClose () {
+      this.$emit('input', false)
+      this.$emit('close')
     }
   }
 }
