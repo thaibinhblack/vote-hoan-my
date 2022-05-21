@@ -132,6 +132,7 @@ export default {
 
   created () {
     this.initData()
+    this.checkDevice()
   },
 
   methods: {
@@ -218,6 +219,13 @@ export default {
           this.selection = []
         })
       }
+    },
+
+    checkDevice () {
+      let width = window.innerWidth
+
+      if (width > 991) this.$store.dispatch('setIsMobile', false)
+      else this.$store.dispatch('setIsMobile', true)
     }
   }
 }

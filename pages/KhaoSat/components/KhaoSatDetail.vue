@@ -3,7 +3,9 @@
     :title="title"
     :visible.sync="value"
     class="khao-sat-detail"
+    :size="size"
     @close="onClose"
+    :before-close="onClose"
   >
     <el-form
       class="khao-sat-detail__form"
@@ -38,7 +40,8 @@ export default {
 
   data: () => ({
     rules: {},
-    form: {}
+    form: {},
+    size: '40%'
   }),
 
   watch: {
@@ -55,10 +58,19 @@ export default {
     }
   },
 
+  created () {
+    this.initData()
+  },
+
   methods: {
     onClose () {
       this.$emit('input', false)
       this.$emit('close')
+    },
+
+    initData () {
+      if (this.$store.state.isMobile) this.size = '100%'
+      else this.size = '40%'
     }
   }
 }
