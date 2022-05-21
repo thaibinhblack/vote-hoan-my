@@ -2,21 +2,36 @@
   <el-drawer
     :title="title"
     :visible.sync="value"
-    class="form-dap-an"
+    class="m-form-dap-an"
+    size="50%"
   >
-    <el-form
-      class="khao-sat-detail__form"
-      :rules="rules"
-      ref="form-dap-an"
-    >
+    <form-dap-an
+      v-for="(item, index) in form"
+      :key="index"
+      :data="item"
+    />
 
-    </el-form>
+    <div class="col-12 m-form-dap-an__action-cotnainer">
+      <el-button
+        type="primary"
+        plain
+        @click="onCreate"
+      >
+        Thêm mới
+      </el-button>
+    </div>
   </el-drawer>
 </template>
 
 <script>
+import FormDapAn from './FormDapAn.vue'
+
 export default {
   name: 'MKhaoSatDetail',
+
+  components: {
+    FormDapAn
+  },
 
   props: {
     value: {
@@ -30,27 +45,38 @@ export default {
     },
 
     data: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => ([])
     }
   },
 
   data: () => ({
     rules: {},
-    form: {}
+    form: []
   }),
 
   watch: {
     value (data) {
       if (data) {
-        this.form = Object.entries(this.data).length > 0
-        ? {
-          ...this.data
-        }
-        : {}
+        this.initData()
       } else {
         // this.$refs['form-khao-sat'].clear()
       }
+    }
+  },
+
+  methods: {
+    initData () {
+      this.form = [
+        ...this.data
+      ]
+    },
+
+    onCreate () {
+      this.form = [
+        ...this.form,
+        {}
+      ]
     }
   }
 }

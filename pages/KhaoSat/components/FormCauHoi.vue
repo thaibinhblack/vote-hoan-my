@@ -113,7 +113,8 @@
 
 <script>
 import {
-  mapState
+  mapState,
+  mapActions
 } from 'vuex'
 import MFormDapAn from './MFormDapAn.vue'
 
@@ -141,7 +142,7 @@ export default {
     form: {},
     open: false,
     title: '',
-    dataAnswer: {}
+    dataAnswer: []
   }),
 
   computed: {
@@ -163,6 +164,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('dapanCauHoi', ['queryDapAn']),
+
     initData () {
       this.form = {
         ...this.data
@@ -174,8 +177,15 @@ export default {
     onRemove () {},
 
     showAnswer () {
-      this.open = true
-      this.title = `Đáp án câu hỏi ${this.data.ten_cauhoi}`
+      this.queryDapAn({
+        cauhoi_id: this.data.cauhoi_id
+      }).then((res) => {
+        this.dataAnswer = [
+          ...res
+        ]
+        this.title = `Đáp án câu hỏi ${this.data.ten_cauhoi}`
+        this.open = true
+      })
     }
   }
 }
