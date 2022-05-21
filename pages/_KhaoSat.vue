@@ -22,28 +22,30 @@
 
         <div
           v-if="Object.entries(query).length === 0"
-          class="col-12 page-khao-sat__content"
+          class="col-12"
         >
-          <custom-table
-            v-model="selection"
-            :columns="columns"
-            :data="list"
-            @edit="handleEdit"
-            :checkbox="true"
-          >
-            <template #action="{ data }">
-              <button
-                @click="onNext(data)"
-              >
-                <v-icon>mdi-chevron-right</v-icon>
-              </button>
-            </template>
-          </custom-table>
+          <div class="page-khao-sat__content">
+            <custom-table
+              v-model="selection"
+              :columns="columns"
+              :data="list"
+              @edit="handleEdit"
+              :checkbox="true"
+            >
+              <template #action="{ data }">
+                <button
+                  @click="onNext(data)"
+                >
+                  <v-icon>mdi-chevron-right</v-icon>
+                </button>
+              </template>
+            </custom-table>
 
-          <custom-pagination
-            class="page-khao-sat__pagination"
-            :total="list.length"
-          />
+            <custom-pagination
+              class="page-khao-sat__pagination"
+              :total="list.length"
+            />
+          </div>
         </div>
         <div
           v-else
@@ -245,6 +247,13 @@ export default {
 
   &__step-form {
     width: 100%;
+  }
+
+  &__content {
+    padding: 25px 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: -1px 3px 3px #e2e2e2;
   }
 }
 </style>
