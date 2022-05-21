@@ -1,6 +1,5 @@
 <template>
   <div class="custom-table">
-    {{ value }}
     <el-table
       v-model="value"
       :data="data"

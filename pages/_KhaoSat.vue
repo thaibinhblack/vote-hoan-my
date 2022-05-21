@@ -225,6 +225,7 @@ export default {
 
 <style lang="scss">
 .page-khao-sat {
+  min-height: calc(100vh - 48px);
   background-color: #e2e2e2;
 
   &__pagination {
