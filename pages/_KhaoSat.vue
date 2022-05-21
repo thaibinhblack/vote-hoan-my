@@ -30,6 +30,7 @@
               :columns="columns"
               :data="list"
               @edit="handleEdit"
+              @delete="handleDelete"
               :checkbox="true"
             >
               <template #action="{ data }">
@@ -140,7 +141,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('phienBanKhaoSat', ['fetchListKhaoSat', 'fetchKhaoSat']),
+    ...mapActions('phienBanKhaoSat', ['fetchListKhaoSat', 'fetchKhaoSat', 'deletePhienBan']),
     ...mapActions('phanCauHoi', ['fetchList']),
 
     initData () {
@@ -231,6 +232,13 @@ export default {
 
       if (width > 991) this.$store.dispatch('setIsMobile', false)
       else this.$store.dispatch('setIsMobile', true)
+    },
+
+    handleDelete (data) {
+      this.$confirm(`Bạn có muốn xóa "${data.tieude_khaosat}?"`)
+      .then(() => {
+        this.deletePhienBan(data)
+      })
     }
   }
 }

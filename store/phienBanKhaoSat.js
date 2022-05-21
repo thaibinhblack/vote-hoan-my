@@ -145,6 +145,12 @@ export const mutations = {
         return arr
       }, [])
     ]
+  },
+
+  DELETE_DATA: (state, payload) => {
+    state.list = [
+      ...state.list.filter((item) => item.phienban_id !== payload.phienban_id)
+    ]
   }
 }
 
@@ -213,5 +219,9 @@ export const actions = {
       ...payload
     }
     commit('CREATE_DATA', data)
+  },
+
+  deletePhienBan: ({ commit }, payload) => {
+    commit('DELETE_DATA', payload)
   }
 }
