@@ -90,6 +90,7 @@ export const state = () => ({
 
 export const getters = {
   list: (state) => {
+    console.log('getter', state.list)
     return state.list.map(item => ({
       ...item,
       trang_thai_text: 
@@ -168,6 +169,7 @@ export const actions = {
     const result = {
       phienban_id: 1,
       url_khaosat: '/khaosat?phienban_id=1',
+      status_khaosat: 1,
       time_start: '08:00:00 07/05/2022',
       time_end: '10:00:00 07/05/2022',
       tieude_khaosat: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
@@ -222,6 +224,18 @@ export const actions = {
   },
 
   deletePhienBan: ({ commit }, payload) => {
+    console.log('delete', payload)
     commit('DELETE_DATA', payload)
+  },
+
+  handleDelete: ({ dispatch }, payload) => {
+    return new Promise((resolve, reject) => {
+      try {
+        dispatch('deletePhienBan', payload)
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 }

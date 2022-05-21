@@ -35,6 +35,7 @@
             >
               <template #action="{ data }">
                 <button
+                  title="Chi tiết"
                   @click="onNext(data)"
                 >
                   <v-icon>mdi-chevron-right</v-icon>
