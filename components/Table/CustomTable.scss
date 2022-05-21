@@ -1,0 +1,18 @@
+.custom-table {
+  .el-table {
+    border: 1px solid #e2e2e2;
+    font-size: 11px;
+
+    &__cell {
+      padding: 8px 0 !important;
+    }
+  }
+
+  &__btn-action {
+    font-size: 11px;
+
+    i {
+      font-size: 14px !important;
+    }
+  }
+}

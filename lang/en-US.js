@@ -129,4 +129,9 @@ export default {
       reasons: "Reasons for not registering higher scores"
     }
   },
+  components: {
+    FilterTable: {
+      create: 'Create'
+    }
+  }
 }

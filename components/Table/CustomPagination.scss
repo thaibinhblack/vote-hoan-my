@@ -1,0 +1,15 @@
+.custom-pagination {
+  .el-pager {
+    padding: 0;
+  }
+
+  .number {
+    border: 1px solid #e2e2e2;
+    background-color: #f4f4f5;
+
+    &.active, &:hover {
+      background-color: #409eff;
+      color: #fff;
+    }
+  }
+}

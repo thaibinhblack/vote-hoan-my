@@ -64,6 +64,11 @@ export const actions = {
         icon: "mdi-login-variant",
         menu_name: "Đăng nhập hệ thống",
         path: "/login"
+      },
+      {
+        menu_name: 'Khảo sát',
+        path: '/khao-sat',
+        icon: 'mdi-bookmark-box-multiple-outline'
       }
     ];
 
@@ -79,16 +84,16 @@ export const actions = {
         par.duAnCode = process.env.DU_AN_CODE;
       }
 
-      await this.$services.menu
-        .apiMenuTheoPhanQuyenIdAndDuAnId(par)
-        .then(res => {
-          let data = res.data.data;
-          if (data)
-            menu = _.sortBy(data, ['order_by']);
-        })
-        .catch(err => {
-          console.log("Erro :" + err);
-        });
+      // await this.$services.menu
+      //   .apiMenuTheoPhanQuyenIdAndDuAnId(par)
+      //   .then(res => {
+      //     let data = res.data.data;
+      //     if (data)
+      //       menu = _.sortBy(data, ['order_by']);
+      //   })
+      //   .catch(err => {
+      //     console.log("Erro :" + err);
+      //   });
 
     }
 

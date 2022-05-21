@@ -1,5 +1,8 @@
 <template>
-  <v-container :fluid="!$vuetify.breakpoint.mobile">
+  <v-container
+    :fluid="!$vuetify.breakpoint.mobile"
+    class="page-main"
+  >
     <step-form />
   </v-container>
 </template>
@@ -30,3 +33,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  .page-main {
+    padding: 0;
+  }
+</style>

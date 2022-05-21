@@ -141,6 +141,16 @@ export default {
       reasons: "Lý do không đăng ký điểm cao hơn"
     },
 
+  },
+  components: {
+    FilterTable: {
+      create: 'Thêm mới',
+      search: 'Tìm kiếm',
+      delete: 'Xóa'
+    },
+    CustomTable: {
+      edit: 'Chỉnh sửa',
+      delete: 'Xóa'
+    }
   }
-  ,
 }

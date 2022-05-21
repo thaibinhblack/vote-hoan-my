@@ -20,9 +20,7 @@
       :sub-group="item.cap > 1"
     >
       <template v-slot:activator>
-
         <v-list-item-title>{{ lang === 'en' ? item.menu_name_english : item.menu_name }}</v-list-item-title>
-
       </template>
 
       <v-list-item v-show="getMenu(item.children).length > 0">

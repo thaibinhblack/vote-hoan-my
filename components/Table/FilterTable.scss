@@ -1,0 +1,66 @@
+.filter-table {
+  &__label {
+    padding: 5px 0;
+    font-weight: bold;
+  }
+
+  .el-input__inner {
+    height: 35px;
+    line-height: 35px;
+  }
+
+  .el-button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  &__item {
+    min-width: 200px;
+    margin: 0 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__action {
+    min-width: 100px;
+    float: right;
+
+    .v-icon.v-icon {
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    &.\--create {
+      & , .v-icon.v-icon {
+        color: #fff;
+      }
+    }
+  }
+
+  &__group-search {
+    background-color: #f0f6fa;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__top {
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+  }
+}
