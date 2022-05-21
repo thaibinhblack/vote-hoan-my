@@ -45,7 +45,13 @@ export default {
     socketUrl: process.env.NODE_ENV === "development" ? process.env.DEV_URL_SOCKET : process.env.PRO_URL_SOCKET,
     duAnCode: process.env.DU_AN_CODE,
   },
-  router: {},
+  router: {
+    routes: [
+      {
+        path: '/khao-sat', component: 'pages/_KhaoSat'
+      }
+    ]
+  },
   /*
    ** Customize the progress-bar color
    */
@@ -76,6 +82,7 @@ export default {
     {src: "~/plugins/user.js", ssr: false},
     {src: "~/plugins/SplitterPage.js", ssr: false},
     {src: "~/plugins/echarts", ssr: false},
+    {src: "~/plugins/element-ui", ssr: false},
   ],
   /*
    ** Nuxt.js dev-modules

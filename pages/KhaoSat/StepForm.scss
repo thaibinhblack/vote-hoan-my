@@ -1,0 +1,106 @@
+.step-form {
+  background-color: rgba(234, 239, 233, 1);
+  min-height: calc(100vh - 85px);
+  padding: 25px ;
+
+  &__container {
+    margin: auto;
+    width: 80%;
+
+    @media (min-width: 991px) {
+      width: 43.68%;
+    }
+  }
+
+  &__banner {
+    width: 100%;
+    padding-top: 25%;
+    background-image: url('@/assets/images/demo-step-form.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__item {
+    margin: 12px 0;
+
+    &.\--border {
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+    }
+  }
+
+  &__action {
+    margin: 12px 0;
+    padding: 9.5px 24px;
+    background: #fff;
+    color: rgb(87, 129, 76);
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: -1px 3px 6px rgb(87, 129, 76);
+
+    &.\--success {
+      background-color: rgb(87, 129, 76);
+      color: #fff;
+    }
+  }
+
+  &__flowing {
+    display: none;
+    top: 150px;
+    right: 150px;
+    position: fixed;
+    background: #fff;
+    z-index: 999;
+    width: 250px;
+
+    @media (min-width: 991px) {
+      display: block;
+    }
+  }
+
+  &__flowing-txt {
+    padding: 5px;
+  }
+
+  &__title-flowing {
+    display: block;
+    width: 100%;
+    background: #e2e2e2;
+    padding-left: 25px;
+  }
+
+  &__question-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid #e2e2e2;
+
+  }
+
+  &__question-item {
+    border: 1px solid #e2e2e2;
+    text-align: center;
+    width: 20%;
+    cursor: pointer;
+    border-left: none;
+
+    &.\--success {
+      background-color: #0090a1;
+      border-color: #e2e2e2;
+      color: #fff;
+    }
+
+    &.\--warning {
+      background-color: rgb(243, 243, 161);
+    }
+  }
+
+  &__item-box {
+    display: none;
+
+    &.\--active {
+      display: block;
+    }
+  }
+}
