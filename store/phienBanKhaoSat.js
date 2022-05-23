@@ -71,7 +71,7 @@ export const state = () => ({
     },
     {
       label: 'Trạng thái',
-      column: 'status_khaosat',
+      column: 'trang_thai_text',
       align: 'center',
     },
     {
@@ -89,7 +89,20 @@ export const state = () => ({
 })
 
 export const getters = {
-
+  list: (state) => {
+    console.log('getter', state.list)
+    return state.list.map(item => ({
+      ...item,
+      trang_thai_text: 
+        item.status_khaosat === 1
+        ? 'Đang hoạt động'
+        : (
+            item.status_khaosat === 2 
+            ? 'Ngừng hoạt động'
+            : 'Chưa cập nhật'
+          )
+    }))
+  }
 }
 
 export const mutations = {
@@ -102,6 +115,42 @@ export const mutations = {
   SET_LIST: (state, payload) => {
     state.list = [
       ...payload
+    ]
+  },
+
+  CREATE_DATA: (state, payload) => {
+    state.list = [
+      {
+        ...payload
+      },
+      ...state.list
+    ]
+  },
+
+  UPDATE_DATA: (state, payload) => {
+    state.list = [
+      ...state.list.reduce((arr, key) => {
+        arr = payload.phienban_id === key.phienban_id
+        ? [
+          ...arr,
+          {
+            ...payload
+          }
+        ]
+        : [
+          ...arr,
+          {
+            ...key
+          }
+        ]
+        return arr
+      }, [])
+    ]
+  },
+
+  DELETE_DATA: (state, payload) => {
+    state.list = [
+      ...state.list.filter((item) => item.phienban_id !== payload.phienban_id)
     ]
   }
 }
@@ -120,6 +169,7 @@ export const actions = {
     const result = {
       phienban_id: 1,
       url_khaosat: '/khaosat?phienban_id=1',
+      status_khaosat: 1,
       time_start: '08:00:00 07/05/2022',
       time_end: '10:00:00 07/05/2022',
       tieude_khaosat: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
@@ -159,6 +209,33 @@ export const actions = {
     ]
 
     dispatch('setList', result)
-  }
+  },
+  
+  updatePhienBan: ({ commit }, payload) => {
+    commit('UPDATE_DATA', payload)
+  },
+  
+  createPhienBan: ({ commit, state }, payload) => {
+    const data = {
+      phienban_id: state.list.length + 1,
+      ...payload
+    }
+    commit('CREATE_DATA', data)
+  },
 
+  deletePhienBan: ({ commit }, payload) => {
+    console.log('delete', payload)
+    commit('DELETE_DATA', payload)
+  },
+
+  handleDelete: ({ dispatch }, payload) => {
+    return new Promise((resolve, reject) => {
+      try {
+        dispatch('deletePhienBan', payload)
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }

@@ -130,7 +130,7 @@
             :key="index"
             :data="item"
           />
-          <div class="col-12">
+          <div class="col-12 form-phan-cau-hoi__footer">
             <el-button
               class="form-phan-cau-hoi__btn-action"
               plain
@@ -209,7 +209,10 @@ export default {
     },
 
     onRemove () {
-      this.$emit('remove', this.data)
+      this.$confirm(`Bạn muốn gỡ bỏ ${this.data.ten_cauhoi}`)
+      .then(() => {
+        this.$emit('remove', this.data)
+      })
     },
 
     onShow () {
@@ -226,7 +229,9 @@ export default {
         ...this.list,
         {}
       ]
-    }
+    },
+
+    onSubmit () {}
   }
 }
 </script>
@@ -268,6 +273,10 @@ export default {
     i {
       font-size: 15px !important;
     }
+  }
+
+  &__footer {
+    padding: 15px;
   }
 }
 </style>

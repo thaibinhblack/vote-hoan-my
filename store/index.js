@@ -12,7 +12,8 @@ export const state = () => ({
   socket: {
     Id: null,
     isConnected: false,
-  }
+  },
+  isMobile: false
 
 });
 
@@ -50,6 +51,10 @@ export const mutations = {
   setPhongBanLamViec(state, data) {
     state.phongBanLamViec = data;
   },
+
+  SET_IS_MOBILE (state, payload) {
+    state.isMobile = payload
+  }
 
 };
 
@@ -104,6 +109,10 @@ export const actions = {
   async dangXuat({commit}) {
     commit("setPhongBanLamViec", null);
     commit("setKhoLamViec", null);
+  },
+
+  setIsMobile: ({ commit }, payload) => {
+    commit('SET_IS_MOBILE', payload)
   }
 };
 

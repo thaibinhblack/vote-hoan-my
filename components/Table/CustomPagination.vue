@@ -5,8 +5,9 @@
   >
     <el-pagination
       :page-size="size"
-      layout="total, prev, pager, next"
+      layout="total, sizes, prev, pager, next"
       :total="total"
+      :page-sizes="sizes"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
@@ -26,6 +27,11 @@ export default {
     total: {
       type: Number,
       default: 0
+    },
+
+    sizes: {
+      type: Array,
+      default: () => ([50, 100, 150, 200, 500])
     }
   },
 
