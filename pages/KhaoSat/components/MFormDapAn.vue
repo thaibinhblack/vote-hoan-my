@@ -77,6 +77,7 @@ export default {
         ...this.form,
         {}
       ]
+      this.$emit('submit', this.form.length)
     }
   }
 }

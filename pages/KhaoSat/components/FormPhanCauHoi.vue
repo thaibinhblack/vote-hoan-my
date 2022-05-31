@@ -22,7 +22,7 @@
 
         <div class="col-12">
           <h3 class="form-phan-cau-hoi__title">
-            Phần {{ form.giatri_cauhoi }}
+            {{ language === 'vi' ? 'Phần' : 'Block' }} {{ form.giatri_cauhoi }}
           </h3>
         </div>
       </div>
@@ -38,10 +38,16 @@
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
           prop="giatri_cauhoi"
-          label="Mã phần câu hỏi"
+          :label="language === 'vi'
+            ? 'Mã phần câu hỏi'
+            : 'Key block question'
+          "
         >
           <el-input
-            placeholder="Nhập mã phần câu hỏi"
+            :placeholder="language === 'vi'
+              ? 'Nhập mã phần câu hỏi'
+              : 'Please input block question'
+            "
             v-model="form.giatri_cauhoi"
           />
         </el-form-item>
@@ -49,10 +55,16 @@
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
           prop="ten_cauhoi"
-          label="Tên phần câu hỏi"
+          :label="language === 'vi'
+            ? 'Tên phần câu hỏi'
+            : 'Name block question'
+          "
         >
           <el-input
-            placeholder="Nhập tên phần câu hỏi"
+            :placeholder="language === 'vi'
+              ? 'Nhập tên phần câu hỏi'
+              : 'Please input name block question'
+            "
             v-model="form.ten_cauhoi"
           />
         </el-form-item>
@@ -60,7 +72,10 @@
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
           prop="phanloai"
-          label="Loại câu hỏi"
+          :label="language === 'vi'
+            ? 'Loại câu hỏi'
+            : 'Type question'
+          "
         >
           <el-select
             class="form-phan-cau-hoi__select"
@@ -78,7 +93,10 @@
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
           prop="phanloai"
-          label="Trạng thái câu hỏi"
+          :label="language === 'vi'
+            ? 'Trạng thái câu hỏi'
+            : 'Status question'
+          "
         >
           <el-select
             class="form-phan-cau-hoi__select"
@@ -95,7 +113,10 @@
       </div>
 
       <el-form-item
-        label="Mô tả câu hỏi"
+        :label="language === 'vi'
+          ? 'Mô tả câu hỏi'
+          : 'Description question'
+        "
         prop="mota_cauhoi"
       >
         <el-input
@@ -111,7 +132,11 @@
       class="col-12"
     >
       <h4 class="form-phan-cau-hoi__title">
-        Thông tin câu hỏi
+        {{ 
+          language === 'vi'
+          ? 'Thông tin câu hỏi'
+          : 'Info block question'
+         }}
 
         <button
           type="button"
@@ -129,8 +154,22 @@
             v-for="(item, index) in list"
             :key="index"
             :data="item"
+            :cauhoi="form"
+            :language="language"
           />
           <div class="col-12 form-phan-cau-hoi__footer">
+             <el-button
+              class="form-phan-cau-hoi__btn-action"
+              plain
+              type="success"
+              @click="onUpdate"
+            >
+              <v-icon>mdi-content-save-outline</v-icon>
+              {{
+                language === 'vi' ? 'Cập nhật' : 'Update'
+              }}
+            </el-button>
+
             <el-button
               class="form-phan-cau-hoi__btn-action"
               plain
@@ -138,7 +177,7 @@
               @click="onNew"
             >
               <v-icon>mdi-plus</v-icon>
-              Thêm mới
+              {{ language === 'vi' ? 'Thêm mới' : 'Create new' }}
             </el-button>
           </div>
         </div>
@@ -165,6 +204,11 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    },
+
+    language: {
+      type: String,
+      default: 'vi'
     }
   },
 
@@ -231,7 +275,9 @@ export default {
       ]
     },
 
-    onSubmit () {}
+    onSubmit () {},
+
+    onUpdate () {}
   }
 }
 </script>
@@ -263,6 +309,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin: 15px 0;
   }
 
   &__question-cotnainer {

@@ -47,5 +47,16 @@ export const actions = {
         reject(error)
       }
     })
+  },
+
+  totalDapAn: ({ dispatch }, cauhoi_id) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const result = data.filter((item) => item.cauhoi_id === cauhoi_id)
+        resolve(result.length)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 }

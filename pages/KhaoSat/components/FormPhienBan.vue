@@ -13,18 +13,27 @@
           <el-form-item
             class="col-12 col-md-4 col-xl-3"
             prop="tieude_khaosat"
-            label="Tiêu đề"
+            :label="language === 'vi'
+              ? 'Tiêu đề'
+              : 'Title'
+            "
           >
             <el-input
               v-model="form.tieude_khaosat"
-              placeholder="Nhập tiêu đề khảo sát"
+              :placeholder="language === 'vi'
+                ? 'Nhập tiêu đề khảo sát'
+                : 'Please input title'
+              "
             />
           </el-form-item>
 
           <el-form-item
             class="col-12 col-md-4 col-xl-3"
             prop="status_khaosat"
-            label="Trạng thái"
+            :label="language === 'vi'
+              ? 'Trạng thái'
+              : 'Status'
+            "
           >
             <el-select
               class="form-phien-ban__select"
@@ -46,13 +55,20 @@
           >
             <el-input
               v-model="form.url_khaosat"
-              placeholder="Nhập url khao sát"
+              :placeholder="language === 'vi'
+                ? 'Nhập url khao sát'
+                : 'Please input url vote'
+              "
             />
           </el-form-item>
         </div>
 
         <el-form-item
-          label="Mô tả"
+          prop="mota_khaosat"
+          :label="language === 'vi'
+            ? 'Mô tả'
+            : 'Description'
+          "
         >
           <el-input
             v-model="form.mota_khaosat"
@@ -70,7 +86,7 @@
           <v-icon>
             mdi-content-save-outline
           </v-icon>
-          Lưu lại
+          {{ language === 'vi' ? 'Lưu lại' : 'Update' }}
         </el-button>
 
         <el-button
@@ -92,7 +108,7 @@
           <v-icon>
             mdi-delete
           </v-icon>
-          Gỡ bỏ
+          {{ language === 'vi' ? 'Gỡ bỏ' : 'Remove' }}
         </el-button>
       </div>
     </el-form>
@@ -111,6 +127,11 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    },
+
+    language: {
+      type: String,
+      default: 'vi'
     }
   },
 

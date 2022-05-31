@@ -3,7 +3,7 @@
     v-loading="loading"
     class="page page-khao-sat"
   >
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div
           class="col-12"
@@ -249,6 +249,7 @@ export default {
 .page-khao-sat {
   min-height: calc(100vh - 48px);
   background-color: #e2e2e2;
+  padding: 0 15px;
 
   &__pagination {
     padding: 15px 0;
