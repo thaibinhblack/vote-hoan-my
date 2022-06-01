@@ -1,0 +1,32 @@
+.m-setting-user {
+  &__header {
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  &__form {
+    padding: 0 15px;
+  }
+
+  &__select {
+    display: block;
+    width: 100%;
+
+    .el-input__prefix, .el-input__suffix {
+      height: 40px;
+      top: 40px;
+    }
+
+    .el-select__tags {
+      top: 75% !important;
+    }
+  }
+
+  &__benhvien {
+    padding: 15px 0;
+    border-top: 1px solid #e2e2e2;
+  }
+
+  &__footer {
+    padding: 0 15px;
+  }
+}

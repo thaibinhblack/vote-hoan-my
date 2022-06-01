@@ -35,6 +35,21 @@
             >
               <template #action="{ data }">
                 <button
+                  class="page-khao-sat__btn"
+                  title="Group"
+                  @click="onUser(data)"
+                >
+                  <v-icon>mdi-account</v-icon>
+                </button>
+                <button
+                  class="page-khao-sat__btn"
+                  title="Preview"
+                  @click="onPreview(data)"
+                >
+                  <v-icon>mdi-eye</v-icon>
+                </button>
+                <button
+                  class="page-khao-sat__btn"
                   title="Chi tiết"
                   @click="onNext(data)"
                 >
@@ -65,6 +80,11 @@
       :data="dataEdit"
       :title="title"
     />
+
+    <m-setting-user
+      v-model="settingUser"
+      :title="titleSettingUser"
+    />
   </div>
 </template>
 
@@ -75,6 +95,8 @@ import CustomPagination from '@/components/Table/CustomPagination.vue'
 import MKhaoSatDetail from './KhaoSat/components/KhaoSatDetail.vue'
 import StepForm from './KhaoSat/StepForm.vue'
 import KhaoSatDetail from './KhaoSat/detail.vue'
+import MSettingUser from './KhaoSat/components/MSettingUser'
+
 import {
   mapState,
   mapGetters,
@@ -90,7 +112,8 @@ export default {
     CustomPagination,
     MKhaoSatDetail,
     StepForm,
-    KhaoSatDetail
+    KhaoSatDetail,
+    MSettingUser
   },
 
   middleware: "auth",
@@ -111,7 +134,9 @@ export default {
       create: false,
       delete: false
     },
-    selection: []
+    selection: [],
+    settingUser: false,
+    titleSettingUser: ''
   }),
 
   computed: {
@@ -144,6 +169,7 @@ export default {
   methods: {
     ...mapActions('phienBanKhaoSat', ['fetchListKhaoSat', 'fetchKhaoSat', 'deletePhienBan']),
     ...mapActions('phanCauHoi', ['fetchList']),
+    ...mapActions('benhVien', ['fetchListBenhVien']),
 
     initData () {
       this.loading = true
@@ -172,6 +198,8 @@ export default {
         }
         this.fetchListKhaoSat()
       }
+
+      this.fetchListBenhVien()
       
       this.loading = false
     },
@@ -240,30 +268,18 @@ export default {
       .then(() => {
         this.deletePhienBan(data)
       })
-    }
+    },
+
+    onUser (data) {
+      this.settingUser = true
+      this.titleSettingUser = `Cài đặt người dùng tham gia khảo sát "${data.tieude_khaosat}"`
+    },
+
+    onPreview () {}
   }
 }
 </script>
 
 <style lang="scss">
-.page-khao-sat {
-  min-height: calc(100vh - 48px);
-  background-color: #e2e2e2;
-  padding: 0 15px;
-
-  &__pagination {
-    padding: 15px 0;
-  }
-
-  &__step-form {
-    width: 100%;
-  }
-
-  &__content {
-    padding: 25px 15px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: -1px 3px 3px #e2e2e2;
-  }
-}
+@import '@/pages/KhaoSat/style.scss';
 </style>

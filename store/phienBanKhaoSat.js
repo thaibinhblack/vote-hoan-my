@@ -56,12 +56,6 @@ export const state = () => ({
       width: 60
     },
     {
-      label: 'URK Khảo sát',
-      column: 'url_khaosat',
-      align: 'center',
-      width: 130
-    },
-    {
       label: 'Tiêu đề',
       column: 'tieude_khaosat',
     },

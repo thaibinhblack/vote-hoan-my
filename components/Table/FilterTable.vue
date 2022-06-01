@@ -1,6 +1,6 @@
 <template>
   <div class="filter-table">
-    <div class="container filter-table__container">
+    <div class="container-fluid filter-table__container">
       <div class="row filter-table__top">
         <h3 class="filter-table__title">
           <button

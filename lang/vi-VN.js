@@ -153,5 +153,14 @@ export default {
       edit: 'Chỉnh sửa',
       delete: 'Xóa'
     }
+  },
+
+  benhvien: {
+    label: 'Bệnh viện'
+  },
+
+  action: {
+    save: 'Lưu lại',
+    close: 'Đóng lại'
   }
 }

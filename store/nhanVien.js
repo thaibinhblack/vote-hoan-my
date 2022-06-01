@@ -1,4 +1,21 @@
 export const state = () => ({
+  users: [
+    {
+      user_id: 1,
+      fullname: 'Nguyễn Thái Bình',
+      benhvien_id: 'BVHM-TPHCM'
+    },
+    {
+      user_id: 2,
+      fullname: 'Anh Út',
+      benhvien_id: 'BVHM-CT'
+    },
+    {
+      user_id: 3,
+      fullname: 'Anh Nguyên',
+      benhvien_id: 'BVHM-DL'
+    },
+  ],
   danhSachNhanVien: []
 });
 
@@ -14,6 +31,31 @@ export const actions = {
       .catch(err => {
         console.log(err);
       });
+  },
+
+  queryNhanVien: ({ dispatch }, benhvien_id) => {
+    return new Promise((resolve, reject) => {
+      const users = [
+        {
+          user_id: 1,
+          fullname: 'Nguyễn Thái Bình',
+          benhvien_id: 'BVHM-TPHCM'
+        },
+        {
+          user_id: 2,
+          fullname: 'Anh Út',
+          benhvien_id: 'BVHM-CT'
+        },
+        {
+          user_id: 3,
+          fullname: 'Anh Nguyên',
+          benhvien_id: 'BVHM-CT'
+        },
+      ]
+
+      const result = users.filter((item) => item.benhvien_id === benhvien_id)
+      resolve(result)
+    })
   }
 };
 

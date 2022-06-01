@@ -24,7 +24,7 @@
       <el-table-column
         prop="action"
         label="Action"
-        width="120"
+        min-width="120"
       >
         <template slot-scope="{row}">
           <button
