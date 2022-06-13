@@ -3,7 +3,6 @@
     :fluid="!$vuetify.breakpoint.mobile"
     class="page-main"
   >
-    <step-form />
   </v-container>
 </template>
 <style scoped>
@@ -30,6 +29,10 @@ export default {
   },
   data() {
     return {}
+  },
+
+  computed: {
+   
   }
 };
 </script>

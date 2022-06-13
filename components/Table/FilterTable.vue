@@ -94,17 +94,31 @@
           </div>
         </div>
 
-        <el-button
-          :class="{
-            'filter-table__action filter-table__item --create': true,
-            '--show': show
-          }"
-          type="primary"
-          @click="onSearch"
-        >
-          <v-icon>mdi-search</v-icon>
-          {{ $t('components.FilterTable.search') }}
-        </el-button>
+        <div class="filter-table__group-btn">
+          <el-button
+            v-if="roles.search"
+            :class="{
+              'filter-table__action filter-table__item --create': true,
+              '--show': show
+            }"
+            type="primary"
+            @click="onSearch"
+          >
+            {{ $t('components.FilterTable.search') }}
+          </el-button>
+
+          <el-button
+            v-if="roles.reset"
+            :class="{
+              'filter-table__action filter-table__item --create': true,
+              '--show': show
+            }"
+            type="success"
+            @click="onReset"
+          >
+            {{ $t('components.FilterTable.reset') }}
+          </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -186,6 +200,10 @@ export default {
 
     onShowLayout () {
       this.show = !this.show
+    },
+
+    onReset () {
+      this.$emit('reset')
     }
   }
 }

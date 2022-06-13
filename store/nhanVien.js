@@ -1,23 +1,60 @@
 export const state = () => ({
-  users: [
+  users: [],
+  danhSachNhanVien: [],
+  columns: [
     {
-      user_id: 1,
-      fullname: 'Nguyễn Thái Bình',
-      benhvien_id: 'BVHM-TPHCM'
+      label: '#',
+      column: 'index',
+      width: 80
     },
     {
-      user_id: 2,
-      fullname: 'Anh Út',
-      benhvien_id: 'BVHM-CT'
+      label: 'Tài khoản ID',
+      column: 'tai_khoan_id',
+      width: 100
     },
     {
-      user_id: 3,
-      fullname: 'Anh Nguyên',
-      benhvien_id: 'BVHM-DL'
+      label: 'Nhân viên ID',
+      column: 'nhan_vien_id',
+      width: 100
     },
-  ],
-  danhSachNhanVien: []
-});
+    {
+      label: 'Mã nhân viên',
+      column: 'ma_nhan_vien',
+      width: 150
+    },
+    {
+      label: 'Tên nhân viên',
+      column: 'ten_nhan_vien',
+    },
+    {
+      label: 'Email',
+      column: 'email',
+    },
+    {
+      label: 'Số điện thoại',
+      column: 'so_dien_thoai',
+    },
+    {
+      label: 'Giới tính',
+      column: 'gioi_tinh',
+      width: 100,
+      format: {
+        type: 'data',
+        data: [
+          {
+            value: 1,
+            label: 'Nam'
+          },
+          {
+            value: 0,
+            label: 'Nữ'
+          }
+        ]
+      }
+    }
+  ]
+})
+
 
 export const actions = {
   async getNhanVien({ commit }) {
@@ -33,28 +70,33 @@ export const actions = {
       });
   },
 
-  queryNhanVien: ({ dispatch }, benhvien_id) => {
-    return new Promise((resolve, reject) => {
-      const users = [
-        {
-          user_id: 1,
-          fullname: 'Nguyễn Thái Bình',
-          benhvien_id: 'BVHM-TPHCM'
-        },
-        {
-          user_id: 2,
-          fullname: 'Anh Út',
-          benhvien_id: 'BVHM-CT'
-        },
-        {
-          user_id: 3,
-          fullname: 'Anh Nguyên',
-          benhvien_id: 'BVHM-CT'
-        },
-      ]
+  setDanhSachNhanVien ({ commit }, data) {
+    commit('setDanhSachNhanVien', data)
+  },
 
-      const result = users.filter((item) => item.benhvien_id === benhvien_id)
-      resolve(result)
+  queryNhanVien({ dispatch }, params) {
+    return new Promise((resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        this.$voteSafe.nhanvien
+          .apiGetNhanVien(params)
+          .then((res) => {
+            dispatch('root/setLoading', false, { root: true })
+            if (res.data.code === 200) {
+              dispatch('setDanhSachNhanVien', res.data.data)
+              resolve(res.data)
+            } else {
+              reject(res.data)
+            }
+          })
+          .catch((err) => {
+            dispatch('root/setLoading', false, { root: true })
+            reject(err)
+          })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
     })
   }
 };
@@ -68,5 +110,15 @@ export const mutations = {
 export const getters = {
   getDanhsachNhanVien(state) {
     return state.danhSachNhanVien;
+  },
+
+  danhSachNhanVien (state) {
+    return state.danhSachNhanVien.reduce((arr, key, index) => ([
+      ...arr,
+      {
+        ...key,
+        index: index + 1
+      }
+    ]), [])
   }
 };

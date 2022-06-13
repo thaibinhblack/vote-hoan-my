@@ -1,4 +1,5 @@
 .m-setting-user {
+  position: relative;
   &__header {
     border-bottom: 1px solid #e2e2e2;
   }
@@ -27,6 +28,34 @@
   }
 
   &__footer {
-    padding: 0 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding:15px;
+    z-index: 9999;
+    border-top: 1px solid #e2e2e2;
+  }
+
+  &__content {
+    max-height: calc(100% - 80px);
+    overflow: hidden scroll;
+
+    &::-webkit-scrollbar-thumb {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      width: 5px;
+    }
+  }
+
+  .el-drawer {
+    width: 70% !important;
+  }
+
+  &__data {
+    padding:50px 15px 0 15px;
   }
 }

@@ -147,7 +147,8 @@ export default {
       create: 'Thêm mới',
       search: 'Tìm kiếm',
       delete: 'Xóa',
-      export: 'Xuất dữ liệu'
+      export: 'Xuất dữ liệu',
+      reset: 'Làm mới'
     },
     CustomTable: {
       edit: 'Chỉnh sửa',
@@ -162,5 +163,8 @@ export default {
   action: {
     save: 'Lưu lại',
     close: 'Đóng lại'
+  },
+  error: {
+    server: 'Lỗi! Xin vui lòng liên hệ với bộ phận IT để được hỗ trợ!'
   }
 }

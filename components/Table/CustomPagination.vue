@@ -19,6 +19,11 @@ export default {
   name: 'CustomPagination',
 
   props: {
+    value: {
+      type: Object,
+      default: () => ({})
+    },
+
     size: {
       type: Number,
       default: 50
@@ -37,11 +42,15 @@ export default {
 
   methods: {
     handleSizeChange (e) {
-      this.$emit('changeSize', e)
+      this.$emit('change', {
+        top: e
+      })
     },
 
     handleCurrentChange (e) {
-      this.$emit('changePage', e)
+      this.$emit('change', {
+        page: e
+      })
     }
   }
 }

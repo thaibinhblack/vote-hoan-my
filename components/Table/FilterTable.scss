@@ -50,6 +50,7 @@
     
     &.el-button {
       display: none;
+      margin-right: 5px;
 
       &.\--show {
         display: block;
@@ -112,6 +113,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    padding: 0 15px;
 
     @media (min-width: 991px) {
       margin-bottom: 0;

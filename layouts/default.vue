@@ -1,5 +1,8 @@
 <template>
-  <div id='appRoot'>
+  <div
+    v-loading="loading"
+    id='appRoot'
+  >
     <template>
       <v-app id='inspire' className='app'>
         <!-- Page Header -->
@@ -33,6 +36,9 @@ import {DxLoadPanel} from 'devextreme-vue/load-panel'
 import Header from '~/components/Layout/Default/Header'
 import AppNavigation from '~/components/Layout/Default/AppNavigation'
 import AppFab from '~/components/Layout/Default/AppFab'
+import {
+  mapState
+} from 'vuex'
 
 export default {
   components: {
@@ -41,8 +47,9 @@ export default {
     DxLoadPanel,
     AppFab
   },
-  middleware: 'auth',
   computed: {
+    ...mapState(['loading']),
+
     loadingVisible() {
       return this.$store.state.isLoading
     }

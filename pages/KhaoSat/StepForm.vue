@@ -225,8 +225,6 @@ export default {
 
   created () {
     Promise.all([
-      this.fetchList(),
-      this.fetchKhaoSat(),
       this.fetchListCauhoi(),
       this.fetchDapAn(),
       this.initData()
@@ -234,9 +232,9 @@ export default {
   },  
 
   methods: {
-    ...mapActions('phanCauHoi', ['fetchList']),
+    ...mapActions('phanCauHoi', ['fetchPhanCauHoi']),
     ...mapActions('cauHoi', ['fetchListCauhoi']),
-    ...mapActions('phienBanKhaoSat', ['fetchKhaoSat']),
+    ...mapActions('phienBanKhaoSat', ['fetchKhaoSatById']),
     ...mapActions('dapanCauHoi', ['fetchDapAn']),
 
     initData () {

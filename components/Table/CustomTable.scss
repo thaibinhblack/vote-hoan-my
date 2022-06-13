@@ -2,6 +2,7 @@
   .el-table {
     border: 1px solid #e2e2e2;
     font-size: 11px;
+    border-radius: 5px;
 
     &__cell {
       padding: 8px 0 !important;
@@ -15,5 +16,13 @@
     i {
       font-size: 14px !important;
     }
+  }
+
+  .\--txt-success {
+    color: #409eff;
+  }
+
+  .\--txt-danger {
+    color: red;
   }
 }

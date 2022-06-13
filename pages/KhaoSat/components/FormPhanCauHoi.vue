@@ -37,7 +37,7 @@
       <div class="row">
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
-          prop="giatri_cauhoi"
+          prop="gia_tri_phan_cau_hoi"
           :label="language === 'vi'
             ? 'Mã phần câu hỏi'
             : 'Key block question'
@@ -48,13 +48,13 @@
               ? 'Nhập mã phần câu hỏi'
               : 'Please input block question'
             "
-            v-model="form.giatri_cauhoi"
+            v-model="form.gia_tri_phan_cau_hoi"
           />
         </el-form-item>
 
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
-          prop="ten_cauhoi"
+          prop="ten_phan_cau_hoi"
           :label="language === 'vi'
             ? 'Tên phần câu hỏi'
             : 'Name block question'
@@ -65,13 +65,13 @@
               ? 'Nhập tên phần câu hỏi'
               : 'Please input name block question'
             "
-            v-model="form.ten_cauhoi"
+            v-model="form.ten_phan_cau_hoi"
           />
         </el-form-item>
 
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
-          prop="phanloai"
+          prop="phan_loai"
           :label="language === 'vi'
             ? 'Loại câu hỏi'
             : 'Type question'
@@ -79,7 +79,7 @@
         >
           <el-select
             class="form-phan-cau-hoi__select"
-            v-model="form.phanloai"
+            v-model="form.phan_loai"
           >
             <el-option
               v-for="({ label, value }, index) in types"
@@ -92,7 +92,7 @@
 
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
-          prop="phanloai"
+          prop="status_phan_cau_hoi"
           :label="language === 'vi'
             ? 'Trạng thái câu hỏi'
             : 'Status question'
@@ -100,7 +100,7 @@
         >
           <el-select
             class="form-phan-cau-hoi__select"
-            v-model="form.status_cauhoi"
+            v-model="form.status_phan_cau_hoi"
           >
             <el-option
               v-for="({ label, value }, index) in status"
@@ -117,12 +117,12 @@
           ? 'Mô tả câu hỏi'
           : 'Description question'
         "
-        prop="mota_cauhoi"
+        prop="mo_ta_phan_cau_hoi"
       >
         <el-input
           type="textarea"
           :rows="3"
-          v-model="form.mota_cauhoi"
+          v-model="form.mo_ta_phan_cau_hoi"
         />
       </el-form-item>
     </el-form>
@@ -162,7 +162,7 @@
               class="form-phan-cau-hoi__btn-action"
               plain
               type="success"
-              @click="onUpdate"
+              @click="onSubmit"
             >
               <v-icon>mdi-content-save-outline</v-icon>
               {{
@@ -232,24 +232,30 @@ export default {
       this.form = {
         ...data
       }
-
-      this.initData()
     }
+  },
+
+  created () {
+    this.initData()
   },
 
   methods: {
     ...mapActions('cauHoi', ['fetchCauhoi']),
+    ...mapActions('phanCauHoi', ['createPhanCauHoi', 'updatePhanCauHoi']),
 
     initData () {
-      if (this.data.phan_cauhoi_id) {
-        this.fetchCauhoi({
-          phancauhoi_id: this.data.phan_cauhoi_id
-        }).then((res) => {
-          this.list = [
-            ...res
-          ]
-        })
+      this.form = {
+        ...this.data
       }
+      // if (this.data.phan_cauhoi_id) {
+      //   this.fetchCauhoi({
+      //     phancauhoi_id: this.data.phan_cauhoi_id
+      //   }).then((res) => {
+      //     this.list = [
+      //       ...res
+      //     ]
+      //   })
+      // }
     },
 
     onRemove () {
@@ -275,9 +281,39 @@ export default {
       ]
     },
 
-    onSubmit () {},
+    onSubmit () {
+      this.loading = true
+      if (!this.form.phan_cau_hoi_id) {
+        this.createPhanCauHoi(this.form)
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: 'Tạo phần câu hỏi thành công'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'warning',
+            message: this.$t('error.server')
+          })
+        })
+      } else this.onUpdate()
+      this.loading = false
+    },
 
-    onUpdate () {}
+    onUpdate () {
+      this.updatePhanCauHoi(this.form)
+      .then(() => {
+        this.$message({
+          type: 'success',
+          message: `Cập nhật phần câu hỏi ${this.form.ten_phan_cau_hoi} thành công!`
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'success',
+          message: this.$t('error.server')
+        })
+      })
+    }
   }
 }
 </script>
