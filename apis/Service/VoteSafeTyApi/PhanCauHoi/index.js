@@ -1,4 +1,4 @@
-const SERVICE = '/phan-cau-hoi'
+const SERVICE = '/votesafety/v1/phan-cau-hoi'
 
 export default function makeServices(axios) {
   return {

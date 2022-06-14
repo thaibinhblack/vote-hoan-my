@@ -117,6 +117,10 @@ export default {
   watch: {
     tabActive() {
       this.initData(this.form.switch_phien_ban)
+    },
+
+    '$route' () {
+      this.initData(this.$route.query.id)
     }
   },
 

@@ -128,23 +128,30 @@ export default {
       this.$emit('submit', this.form.length)
     },
 
-    onSubmit () {
+      async onSubmit () {
       this.loading = true
-      this.form.forEach((item, index) => {
+      await this.form.forEach(async (item, index) => {
         if(item.dap_an_id) {
-          this.onUpdate(item)
-        } else this.onCreate(item, index)
+          await this.onUpdate(item)
+        } else {
+          await this.onCreate(item, index)
+        }
       })
       this.loading = false
     },
 
     onCreate (data, index) {
+      this.loading = true
       data = {
         ...data,
         stt_dap_an: parseInt(data.stt_dap_an),
         value_dap_an: parseInt(data.value_dap_an)
       }
       this.createDapAn(data).then((res) => {
+        this.$message({
+          type: 'success',
+          message: `Cài đặt đáp án ${data.ten_dap_an} thành công!`
+        })
         this.form = [
           ...this.form.reduce((arr, key, idx) => ([
             ...arr,
@@ -155,8 +162,7 @@ export default {
           ]), [])
         ]
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         this.$message({
           type: 'warning',
           message: this.$t('error.server')
@@ -166,12 +172,18 @@ export default {
     },
 
     onUpdate (data) {
+      this.loading = true
       data = {
         ...data,
         stt_dap_an: parseInt(data.stt_dap_an),
         value_dap_an: parseInt(data.value_dap_an)
       }
       this.updateDapAn(data).then(() => {
+        this.$message({
+          type: 'success',
+          message: `Cập nhật đáp án ${data.ten_dap_an} thành công!`
+        })
+        this.loading = false
       })
       .catch(() => {
         this.$message({

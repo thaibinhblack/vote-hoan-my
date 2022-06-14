@@ -1,4 +1,4 @@
-const SERVICE = '/dap-an'
+const SERVICE = '/votesafety/v1/dap-an'
 
 export default function makeServices(axios) {
   return {

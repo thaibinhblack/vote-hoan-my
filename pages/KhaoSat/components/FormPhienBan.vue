@@ -232,7 +232,15 @@ export default {
       })
     },
 
-    onPreview () {},
+    onPreview () {
+      this.$router.push({
+        path: 'StepForm',
+        query: {
+          id: this.form.phien_ban_id
+        },
+        blank: ''
+      })
+    },
 
     onDelete () {
       let vm = this
