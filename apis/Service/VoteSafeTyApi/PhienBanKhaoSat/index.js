@@ -21,5 +21,9 @@ export default function makeServices(axios) {
     apiDeletePhienBan (data) {
       return axios.put(`${SERVICE}/delete`, data)
     },
+
+    apiDeletePhienBanById (id) {
+      return axios.delete(`${SERVICE}/${id}`)
+    }
   }
 }

@@ -206,7 +206,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('phienBanKhaoSat', ['updatePhienBan']),
+    ...mapActions('phienBanKhaoSat', ['updatePhienBan', 'deletePhienBanById']),
 
     initData () {
       if (this.isUpdate) this.form = {
@@ -235,9 +235,30 @@ export default {
     onPreview () {},
 
     onDelete () {
-      this.$confirm(`Bạn có muốn gỡ bỏ ${this.form.tieude_khaosat}?`)
+      let vm = this
+      vm.loading = true
+      vm.$confirm(`Bạn có muốn gỡ bỏ ${this.form.tieu_de_khao_sat}?`)
       .then(() => {
-        this.$emit('remove', this.form)
+        vm.deletePhienBanById(this.form.phien_ban_id)
+        .then(() => {
+          vm.$message({
+            type: 'success',
+            message: `Gỡ bỏ phiên bản ${vm.form.tieu_de_khao_sat} thành công!`
+          })
+          vm.$router.back()
+          vm.loading = false
+        })
+        .catch((err) => {
+          vm.$message({
+            type: 'warning',
+            message: this.$t('error.server')
+          })
+          vm.loading = false
+        })
+      })
+      .catch((err) => {
+        console.log('deletePhienBan', err)
+        this.loading = false
       })
     }
   }

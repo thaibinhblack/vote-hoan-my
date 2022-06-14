@@ -33,6 +33,7 @@
       :model="form"
       :rules="rules"
       class="form-phan-cau-hoi__container"
+      ref="form-phan-cau-hoi"
     >
       <div class="row">
         <el-form-item
@@ -153,9 +154,11 @@
           <form-cau-hoi
             v-for="(item, index) in list"
             :key="index"
+            :index="index"
             :data="item"
-            :cauhoi="form"
+            :phancauhoi="form"
             :language="language"
+            @reset="handleReset"
           />
           <div class="col-12 form-phan-cau-hoi__footer">
              <el-button
@@ -209,12 +212,39 @@ export default {
     language: {
       type: String,
       default: 'vi'
+    },
+
+    phienban: {
+      type: Object,
+      default: () => ({})
     }
   },
 
   data: () => ({
     form: {},
-    rules: {},
+    rules: {
+      ten_phan_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập tên phần câu hỏi'
+        }
+      ],
+      gia_tri_phan_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập giá trị phần câu hỏi'
+        }
+      ],
+      mo_ta_phan_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập mô tả phần câu hỏi'
+        }
+      ]
+    },
     show: false,
     iconShow: 'mdi-chevron-down',
     list: [],
@@ -232,6 +262,9 @@ export default {
       this.form = {
         ...data
       }
+      this.list = [
+        ...data.cau_hois
+      ]
     }
   },
 
@@ -241,27 +274,37 @@ export default {
 
   methods: {
     ...mapActions('cauHoi', ['fetchCauhoi']),
-    ...mapActions('phanCauHoi', ['createPhanCauHoi', 'updatePhanCauHoi']),
+    ...mapActions('phanCauHoi', ['createPhanCauHoi', 'updatePhanCauHoi', 'deletePhanCauHoi']),
 
     initData () {
       this.form = {
         ...this.data
       }
-      // if (this.data.phan_cauhoi_id) {
-      //   this.fetchCauhoi({
-      //     phancauhoi_id: this.data.phan_cauhoi_id
-      //   }).then((res) => {
-      //     this.list = [
-      //       ...res
-      //     ]
-      //   })
-      // }
+      this.fetchCauHoiByPhanCauHoi()
     },
 
     onRemove () {
-      this.$confirm(`Bạn muốn gỡ bỏ ${this.data.ten_cauhoi}`)
+      this.loading = true
+      this.$confirm(`Bạn muốn gỡ bỏ ${this.form.ten_phan_cau_hoi}`)
       .then(() => {
-        this.$emit('remove', this.data)
+        this.deletePhanCauHoi(this.form.phan_cau_hoi_id)
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: `Gỡ bỏ phần câu hỏi ${this.form.ten_phan_cau_hoi} thành công!`
+          })
+          this.$emit('remove', this.form)
+          this.loading = false
+        })
+        .catch(() => {
+          this.$message({
+            type: 'warning',
+            message: this.$t('error.server')
+          })
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
       })
     },
 
@@ -275,28 +318,45 @@ export default {
     },
 
     onNew () {
-      this.list = [
-        ...this.list,
-        {}
-      ]
+      if (this.form.phan_cau_hoi_id) {
+        this.list = [
+          ...this.list,
+          {}
+        ]
+      } else {
+        this.$message({
+          type: 'warning',
+          message: 'Bạn chưa tạo phần câu hỏi!'
+        })
+      }
     },
 
     onSubmit () {
       this.loading = true
-      if (!this.form.phan_cau_hoi_id) {
-        this.createPhanCauHoi(this.form)
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: 'Tạo phần câu hỏi thành công'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'warning',
-            message: this.$t('error.server')
-          })
-        })
-      } else this.onUpdate()
+      this.$refs['form-phan-cau-hoi'].validate(async (valid) => {
+        if (valid) {
+          if (!this.form.phan_cau_hoi_id) {
+            this.createPhanCauHoi(this.form)
+            .then((res) => {
+              this.form = {
+                ...this.form,
+                phan_cau_hoi_id: res.data.phan_cau_hoi_id,
+                switch_phan_cau_hoi: res.data.switch_phan_cau_hoi,
+                switch_phien_ban: this.phienban.switch_phien_ban
+              }
+              this.$message({
+                type: 'success',
+                message: 'Tạo phần câu hỏi thành công'
+              })
+            }).catch(() => {
+              this.$message({
+                type: 'warning',
+                message: this.$t('error.server')
+              })
+            })
+          } else this.onUpdate()
+        }
+      })
       this.loading = false
     },
 
@@ -313,6 +373,34 @@ export default {
           message: this.$t('error.server')
         })
       })
+    },
+
+    fetchCauHoiByPhanCauHoi () {
+      this.loading = true
+      if (this.form.phan_cau_hoi_id) {
+        this.fetchCauhoi({
+          phan_cau_hoi_id: this.form.phan_cau_hoi_id
+        }).then((res) => {
+          this.list = [
+            ...res.data
+          ]
+          this.loading = false
+        })
+        .catch((err) => {
+          this.$message({
+            type: 'warning',
+            message: this.$t('error.server')
+          })
+          this.loading = false
+        })
+      } else {
+        this.list = []
+        this.loading = false
+      }
+    },
+
+    handleReset () {
+      this.fetchCauHoiByPhanCauHoi()
     }
   }
 }

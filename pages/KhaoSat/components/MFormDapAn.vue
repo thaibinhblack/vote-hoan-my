@@ -1,23 +1,38 @@
 <template>
   <el-drawer
+    v-loading="loading"
     :title="title"
     :visible.sync="value"
     class="m-form-dap-an"
     size="50%"
+    :before-close="handleClose"
+    :close-on-press-escape="false"
   >
-    <form-dap-an
-      v-for="(item, index) in form"
-      :key="index"
-      :data="item"
-    />
+    <div class="m-form-dap-an__content">
+      <form-dap-an
+        v-for="(item, index) in form"
+        :key="index"
+        :data="item"
+        v-model="form[index]"
+        @remove="handleRemove($event, index)"
+      />
+    </div>
 
     <div class="col-12 m-form-dap-an__action-cotnainer">
       <el-button
         type="primary"
         plain
-        @click="onCreate"
+        @click="onPlus"
       >
         Thêm mới
+      </el-button>
+
+      <el-button
+        type="primary"
+        plain
+        @click="onSubmit"
+      >
+        Lưu lại
       </el-button>
     </div>
   </el-drawer>
@@ -25,6 +40,9 @@
 
 <script>
 import FormDapAn from './FormDapAn.vue'
+import {
+  mapActions
+} from 'vuex'
 
 export default {
   name: 'MKhaoSatDetail',
@@ -47,12 +65,18 @@ export default {
     data: {
       type: Array,
       default: () => ([])
+    },
+
+    cauhoi: {
+      type: Object,
+      default: () => ({})
     }
   },
 
   data: () => ({
     rules: {},
-    form: []
+    form: [],
+    loading: false
   }),
 
   watch: {
@@ -66,19 +90,154 @@ export default {
   },
 
   methods: {
-    initData () {
-      this.form = [
-        ...this.data
-      ]
+    ...mapActions('dapanCauHoi', ['createDapAn', 'updateDapAn', 'queryDapAn', 'deleteDapAn']),
+
+    close () {
+      this.$emit('input', false)
     },
 
-    onCreate () {
+    initData () {
+      this.loading = true
+      this.queryDapAn({
+        cau_hoi_id: this.cauhoi.cau_hoi_id
+      }).then((res) => {
+        this.form = [
+          ...res.data
+        ]
+        this.loading = false
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
+        this.loading = false
+      })
+    },
+
+    onPlus () {
       this.form = [
         ...this.form,
-        {}
+        {
+          cau_hoi_id: this.cauhoi.cau_hoi_id,
+          switch_cau_hoi: this.cauhoi.switch_cau_hoi,
+          phien_ban_id: this.cauhoi.phien_ban_id,
+          switch_phien_ban: this.cauhoi.switch_phien_ban
+        }
       ]
       this.$emit('submit', this.form.length)
+    },
+
+    onSubmit () {
+      this.loading = true
+      this.form.forEach((item, index) => {
+        if(item.dap_an_id) {
+          this.onUpdate(item)
+        } else this.onCreate(item, index)
+      })
+      this.loading = false
+    },
+
+    onCreate (data, index) {
+      data = {
+        ...data,
+        stt_dap_an: parseInt(data.stt_dap_an),
+        value_dap_an: parseInt(data.value_dap_an)
+      }
+      this.createDapAn(data).then((res) => {
+        this.form = [
+          ...this.form.reduce((arr, key, idx) => ([
+            ...arr,
+            {
+              ...key,
+              dap_an_id: index === idx ? res.data.dap_an_id : key.dap_an_id
+            }
+          ]), [])
+        ]
+      })
+      .catch((err) => {
+        console.log(err)
+        this.$message({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
+        this.loading = false
+      })
+    },
+
+    onUpdate (data) {
+      data = {
+        ...data,
+        stt_dap_an: parseInt(data.stt_dap_an),
+        value_dap_an: parseInt(data.value_dap_an)
+      }
+      this.updateDapAn(data).then(() => {
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
+        this.loading = false
+      })
+    },
+
+    handleClose () {
+      this.close()
+    },
+
+
+    handleRemove (data, idx) {
+      const dapan = this.form.find((item, index) => index === idx)
+
+      if (dapan) {
+        if (dapan.dap_an_id) {
+          this.deleteDapAn(dapan.dap_an_id).then((res) => {
+            this.form = [
+              ...this.form.filter((item, index) => index !== idx)
+            ]
+            this.$message({
+              type: 'success',
+              message: `Gỡ bỏ đáp án ${dapan.ten_dap_an} thành công!`
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'warning',
+              message: this.$t('error.server')
+            })
+          })
+        } else {
+          this.form = [
+            ...this.form.filter((item, index) => index !== idx)
+          ]
+        }
+      }
     }
+
   }
 }
 </script>
+
+<style lang="scss">
+.m-form-dap-an {
+  &__content {
+    height: calc(100% - 70px);
+    max-height: calc(100% - 60px);
+    overflow: hidden scroll;
+  }
+
+  &__action {
+    border-top: 1px solid #e2e2e2;
+    position: absolute;
+    background-color: #fff;
+    padding: 15px;
+    left: 0;
+    bottom: 0;
+  }
+
+  .el-drawer__body {
+    overflow: hidden;
+  }
+}
+</style>

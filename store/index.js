@@ -72,7 +72,7 @@ export const actions = {
       },
       {
         menu_name: 'Khảo sát',
-        path: '/khao-sat',
+        path: '/KhaoSat',
         icon: 'mdi-bookmark-box-multiple-outline'
       }
     ];

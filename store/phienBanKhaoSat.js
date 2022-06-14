@@ -256,7 +256,9 @@ export const actions = {
         .apiCreatePhienBanKhaoSat(payload)
         .then((res) => {
           if(res.data.code === 200) {
-            dispatch('fetchListKhaoSat')
+            dispatch('fetchListKhaoSat', {
+              language: this.$i18n.loadedLanguages[0]
+            })
             resolve(res.data)
           } else {
             dispatch('root/setLoading', false, { root: true })
@@ -282,7 +284,9 @@ export const actions = {
       .apiUpdatePhienBanKhaoSat(payload)
         .then((res) => {
           if (res.data.code === 200) {
-            dispatch('fetchListKhaoSat')
+            dispatch('fetchListKhaoSat', {
+              language: this.$i18n.loadedLanguages[0]
+            })
             resolve(res.data)
           } else {
             dispatch('root/setLoading', false, { root: true })
@@ -304,7 +308,38 @@ export const actions = {
           .then((res) => {
             
             if(res.data.code === 200) {
-              dispatch('fetchListKhaoSat')
+              dispatch('fetchListKhaoSat', {
+                language: this.$i18n.loadedLanguages[0]
+              })
+              resolve(res.data)
+            } else {
+              dispatch('root/setLoading', false, { root: true })
+              reject(res.data)
+            }
+          })
+          .catch((err) => {
+            dispatch('root/setLoading', false, { root: true })
+            reject(err)
+          })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
+    })
+  },
+
+  deletePhienBanById ({ dispatch }, id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phienban
+        .apiDeletePhienBanById(id)
+          .then((res) => {
+            
+            if(res.data.code === 200) {
+              dispatch('fetchListKhaoSat', {
+                language: this.$i18n.loadedLanguages[0]
+              })
               resolve(res.data)
             } else {
               dispatch('root/setLoading', false, { root: true })

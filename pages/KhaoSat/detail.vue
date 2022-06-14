@@ -26,7 +26,8 @@
               v-for="(item, index) in dataPhanCauHoi"
               :key="index"
               :data="item"
-              @remove="onRemove"
+              :phienban="form"
+              @remove="onRemove($event, index)"
             />
           </div>
         </div>
@@ -136,7 +137,8 @@ export default {
         }
         this.tabActive = this.form.language
         this.getPhanCauHoi()
-      }).catch(() => {
+      }).catch((err) => {
+        console.log('fetchKhaoSatById', err)
         this.$message({
           type: 'warning',
           message: 'Phiên bản không tồn tại, hoặc đã tạm ngưng hoạt động!'
@@ -146,9 +148,9 @@ export default {
       
     },
 
-    onRemove (data) {
+    onRemove (data, idx) {
       this.dataPhanCauHoi = [
-        ...this.dataPhanCauHoi.filter((item) => item.phan_cauhoi_id !== data.phan_cauhoi_id)
+        ...this.dataPhanCauHoi.filter((item, index) => index !== idx)
       ]
     },
 
@@ -167,8 +169,9 @@ export default {
         this.dataPhanCauHoi = [
           ...res.data
         ]
-      }).catch(() => {
-        this.$t({
+      }).catch((err) => {
+        console.log('fetchPhanCauHoi', err)
+        this.$message({
           type: 'warning',
           message: this.$t('error.server')
         })

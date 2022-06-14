@@ -37,13 +37,25 @@ export const actions = {
     dispatch('setData', result)
   },
 
-  queryDapAn: ({ dispatch }, params = {}) => {
-    const result = data.filter((item) => item.cauhoi_id === params.cauhoi_id)
-
+  queryDapAn({ dispatch }, params = {}) {
     return new Promise((resolve, reject) => {
       try {
-        resolve(result)
+        dispatch("root/setLoading", true, { root: true })
+        this.$voteSafe.dapan.apiGetDapAn(params)
+        .then((res) => {
+          dispatch("root/setLoading", false, { root: true })
+          if (res.data.code === 200) {
+            resolve(res.data)
+          } else {
+            reject(res.data)
+          }
+        })
+        .catch((err) => {
+          dispatch("root/setLoading", false, { root: true })
+          reject(err)
+        })
       } catch (error) {
+        dispatch("root/setLoading", false, { root: true })
         reject(error)
       }
     })
@@ -57,6 +69,63 @@ export const actions = {
       } catch (error) {
         reject(error)
       }
+    })
+  },
+
+  createDapAn ({ dispatch }, payload) {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.dapan.apiCreateDapAn(payload)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
+    })
+  },
+
+  updateDapAn({ dispatch }, payload) {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.dapan.apiUpdateDapAn(payload)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
+    })
+  },
+
+  deleteDapAn ({ dispatch }, id)  {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.dapan.apiDeleteDapAn(id)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
     })
   }
 }

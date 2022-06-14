@@ -1,20 +1,20 @@
-const SERVICE = '/phan-cau-hoi'
+const SERVICE = '/dap-an'
 
 export default function makeServices(axios) {
   return {
-    apiCreatePhanCauHoi (data) {
+    apiCreateDapAn (data) {
       return axios.post(`${SERVICE}`, data)
     },
 
-    apiGetPhanCauHoi (params) {
+    apiGetDapAn (params) {
       return axios.get(`${SERVICE}`, { params })
     },
 
-    apiUpdatePhanCauHoi(data) {
+    apiUpdateDapAn (data) {
       return axios.put(`${SERVICE}`, data)
     },
 
-    apiDeletePhanCauHoi(id) {
+    apiDeleteDapAn (id) {
       return axios.delete(`${SERVICE}/${id}`)
     }
   }

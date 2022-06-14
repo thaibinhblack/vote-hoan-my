@@ -4,26 +4,27 @@
       class="form-cau-hoi__container col-12"
       :model="form"
       :rules="rules"
+      :ref="`form-cau-hoi-${this.index}`"
       v-loading="loading"
     >
       <div class="row">
         <el-form-item
           class="col-12 col-md-3 col-xl-2"
-          prop="stt_cauhoi"
+          prop="stt_cau_hoi"
           label="STT câu hỏi"
         >
           <el-input
             type="number"
             :min="1"
             :max="100"
-            v-model="form.stt_cauhoi"
+            v-model="form.stt_cau_hoi"
             @change="handleChangeSTT"
           />
         </el-form-item>
 
         <el-form-item
           class="col-12 col-md-5 col-xl-4"
-          prop="ten_cauhoi"
+          prop="ten_cau_hoi"
           :label="language === 'vi'
             ? 'Tên câu hỏi'
             : 'Name Question'
@@ -34,7 +35,7 @@
               ? 'Nhập tên câu hỏi'
               : 'Please input name question'
             "
-            v-model="form.ten_cauhoi"
+            v-model="form.ten_cau_hoi"
           />
         </el-form-item>
 
@@ -61,7 +62,7 @@
 
         <el-form-item
           class="col-12 col-md-4 col-xl-3"
-          prop="tamngung"
+          prop="tam_ngung"
           :label="language === 'vi'
             ? 'Trạng thái câu hỏi'
             : 'Status question'
@@ -69,7 +70,7 @@
         >
           <el-select
             class="form-cau-hoi__select"
-            v-model="form.tamngung"
+            v-model="form.tam_ngung"
           >
             <el-option
               v-for="({ label, value }, index) in status"
@@ -82,7 +83,7 @@
 
         <el-form-item
           class="col-12 col-md-3 col-xl-2"
-          prop="ma_cauhoi"
+          prop="ma_cau_hoi"
           :label="language === 'vi'
             ? 'Mã câu hỏi'
             : 'Key question'
@@ -93,56 +94,57 @@
               ? 'Nhập mã câu hỏi'
               : 'Please input key question'
             "
-            v-model="form.ma_cauhoi"
+            v-model="form.ma_cau_hoi"
           />
         </el-form-item>
       </div>
-      <div class="row">
-        <div class="col-12 form-cau-hoi__action-container">
-          <el-button
-            class="form-cau-hoi__btn"
-            @click="onSave"
-            type="primary"
-            plain
-          >
-          <v-icon>
-            mdi-content-save-outline
-          </v-icon>
-            {{
-              language === 'vi' ? 'Lưu lại' : 'Update'
-            }}
-          </el-button>
-
-          <el-button
-            class="form-cau-hoi__btn"
-            @click="showAnswer"
-            type="primary"
-            plain
-          >
-            <span class="form-cau-hoi__sup">
-              {{ total || 0 }}
-            </span>
-            {{ language === 'vi' ? 'Đáp án' : 'Answers' }}
-          </el-button>
-
-          <el-button
-            class="form-cau-hoi__btn"
-            @click="onRemove"
-            type="danger"
-            plain
-          >
-          <v-icon>
-            mdi-delete
-          </v-icon>
-            {{ language === 'vi' ? 'Gỡ bỏ' : 'Remove' }}
-          </el-button>
-        </div>
-      </div>
     </el-form>
+
+    <div class="col-12 form-cau-hoi__action-container">
+        <el-button
+          class="form-cau-hoi__btn"
+          @click="onSave"
+          type="primary"
+          plain
+        >
+        <v-icon>
+          mdi-content-save-outline
+        </v-icon>
+          {{
+            language === 'vi' ? 'Lưu lại' : 'Update'
+          }}
+        </el-button>
+
+        <el-button
+          class="form-cau-hoi__btn"
+          @click="showAnswer"
+          type="primary"
+          plain
+        >
+          <span class="form-cau-hoi__sup">
+            {{ total || 0 }}
+          </span>
+          {{ language === 'vi' ? 'Đáp án' : 'Answers' }}
+        </el-button>
+
+        <el-button
+          class="form-cau-hoi__btn"
+          @click="onRemove"
+          type="danger"
+          plain
+        >
+        <v-icon>
+          mdi-delete
+        </v-icon>
+          {{ language === 'vi' ? 'Gỡ bỏ' : 'Remove' }}
+        </el-button>
+      </div>
+  
     <m-form-dap-an
       :title="title"
       v-model="open"
       :data="dataAnswer"
+      :cauhoi="form"
       @submit="total = $event"
     />
   </div>
@@ -173,7 +175,7 @@ export default {
       default: null
     },
 
-    cauhoi: {
+    phancauhoi: {
       type: Object,
       default: () => ({})
     },
@@ -181,11 +183,45 @@ export default {
     language: {
       type: String,
       default: 'vi'
+    },
+
+    index: {
+      type: Number,
+      default: 0
     }
   },
 
   data: () => ({
-    rules: {},
+    rules: {
+      stt_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập STT câu hỏi'
+        }
+      ],
+      ten_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập tên câu hỏi'
+        }
+      ],
+      ma_cau_hoi: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa nhập mã câu hỏi'
+        }
+      ],
+      thuan_nghich: [
+        {
+          required: true,
+          trigger: 'blur',
+          message: 'Bạn chưa chọn câu hỏi Thuận / Nghịch'
+        }
+      ],
+    },
     form: {},
     open: false,
     title: '',
@@ -213,55 +249,121 @@ export default {
   },
 
   methods: {
-    ...mapActions('dapanCauHoi', ['queryDapAn', 'totalDapAn']),
-    ...mapActions('cauHoi', ['updateCauHoi']),
+    ...mapActions('cauHoi', ['updateCauHoi', 'createCauHoi', 'deleteCauHoi']),
 
     initData () {
       this.loading = true
       this.form = {
         ...this.data
       }
-      this.totalDapAn(this.form.cauhoi_id)
+      this.loading = false
+    },
+
+    onSave () {
+      let vm = this
+      vm.loading = true
+      vm.form = {
+        ...vm.form,
+        phan_cau_hoi_id: vm.phancauhoi.phan_cau_hoi_id,
+        switch_phan_cau_hoi: vm.phancauhoi.switch_phan_cau_hoi,
+        stt_cau_hoi: parseInt(vm.form.stt_cau_hoi),
+        phien_ban_id: vm.phancauhoi.phien_ban_id,
+        switch_phien_ban: vm.phancauhoi.switch_phien_ban
+      }
+      vm.$refs[`form-cau-hoi-${vm.index}`].validate(async (valid) => {
+        if (valid) {
+          if (vm.form.cau_hoi_id) {
+            vm.onUpdate(this.form)
+          } else vm.onCreate(this.form)
+        }
+      })
+      vm.loading = false
+    },
+
+    onCreate (data) {
+      this.createCauHoi(data)
       .then((res) => {
-        this.total = res
+        this.$message({
+          type: 'success',
+          message: 'Thêm câu hỏi thành công'
+        })
+        this.form = {
+          ...this.form,
+          cau_hoi_id: res.data.cau_hoi_id,
+          switch_cau_hoi: res.data.switch_cau_hoi
+        }
         this.loading = false
-      }).catch(() => {
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
         this.loading = false
       })
     },
 
-    onSave () {
-      this.loading = true
-      this.updateCauHoi(this.form)
-      .then((res) => {
+    onUpdate (data) {
+      this.updateCauHoi(data)
+      .then(() => {
         this.$message({
           type: 'success',
           message: 'Cập nhật thành công'
         })
-        setTimeout(() => {
-          this.loading = false
-        }, 1000);
+        this.loading = false
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
+        this.loading = false
       })
     },
 
-    onRemove () {},
+    onRemove () {
+      let data = {
+        ...this.form
+      }
+      this.loading = true
+      if (data.cau_hoi_id) {
+        this.$confirm(`Bạn có muốn gỡ bỏ câu hỏi: ${data.ten_cau_hoi}?`)
+        .then(() => {
+          this.deleteCauHoi(data.cau_hoi_id).then(() => {
+            this.$message({
+              type: 'success',
+              message: 'Gỡ câu hỏi thành công'
+            })
+            this.loading = false
+            this.$emit('reset')
+          }).catch((err) => {
+            console.log('deleteCauHoi', err)
+            this.$message({
+              type: 'warning',
+              message: this.$t('error.server')
+            })
+            this.loading = false
+          })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+      } else this.$message({
+        type: 'warning',
+        message:' Câu hỏi vẫn chưa được lưu vào Database!!'
+      })
+      this.loading = false
+    },
 
     showAnswer () {
-      this.queryDapAn({
-        cauhoi_id: this.data.cauhoi_id
-      }).then((res) => {
-        this.dataAnswer = [
-          ...res
-        ]
-        this.title = `Đáp án câu hỏi ${this.data.ten_cauhoi}`
-        this.open = true
-      })
+      this.title = `Đáp án câu hỏi ${this.data.ten_cau_hoi}`
+      this.open = true
     },
 
     handleChangeSTT () {
       this.form = {
         ...this.form,
-        ma_cauhoi: `${this.cauhoi.giatri_cauhoi}.${this.form.stt_cauhoi}`
+        ma_cau_hoi: `${this.phancauhoi.gia_tri_phan_cau_hoi}.${this.form.stt_cau_hoi}`
       }
     }
   }
@@ -289,6 +391,7 @@ export default {
   &__action-container {
     display: flex;
     align-items: center;
+    padding: 15px;
   }
   
   .el-form-item {

@@ -68,21 +68,80 @@ export const actions = {
     dispatch('setList', result)
   },
 
-  fetchCauhoi: ({ dispatch }, params = {}) => {
-    const result = data.filter((item) => item.phancauhoi_id === params.phancauhoi_id)
+  fetchCauhoi({ dispatch }, params = {}) {
     return new Promise((resolve, reject) => {
       try {
-        resolve(result)
+        dispatch('root/setLoading', true, { root: true })
+        this.$voteSafe.cauhoi.apiGetCauHoi(params)
+        .then((res) => {
+          dispatch('root/setLoading', false, { root: true })
+          if (res.data.code === 200) {
+            resolve(res.data)
+          } else {
+            dispatch('root/setLoading', false, { root: true })
+            reject(res.data)
+          }
+        })
       } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
         reject(error)
       }
     })
   },
 
-  updateCauHoi: ({ dispatch }, data = {}) => {
+  createCauHoi ({ dispatch }, payload) {
     return new Promise((resolve, reject) => {
-      dispatch('updateData', data)
-      resolve(data)
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.cauhoi.apiCreateCauHoi(payload)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
+    })
+  },
+
+  updateCauHoi({ dispatch }, data = {})  {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.cauhoi.apiUpdateCauHoi(data)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
+    })
+  },
+
+  deleteCauHoi({ dispatch }, id) {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.cauhoi.apiDeleteCauHoi(id)
+      .then((res) => {
+        dispatch('root/setLoading', true, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      }).catch((err) => {
+        dispatch('root/setLoading', true, { root: true })
+        reject(err)
+      })
     })
   }
 }

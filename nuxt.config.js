@@ -45,13 +45,6 @@ export default {
     socketUrl: process.env.NODE_ENV === "development" ? process.env.DEV_URL_SOCKET : process.env.PRO_URL_SOCKET,
     duAnCode: process.env.DU_AN_CODE,
   },
-  router: {
-    routes: [
-      {
-        path: '/khao-sat', component: 'pages/_KhaoSat'
-      }
-    ]
-  },
   /*
    ** Customize the progress-bar color
    */
