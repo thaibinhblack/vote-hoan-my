@@ -1,26 +1,77 @@
 <template>
   <div class="detail-khao-sat">
-    <div class="detail-khao-sat__container">
-      <div class="col-12">
-        <h3 class="detail-khao-sat__title"> Thông tin: </h3>
-        <form-phien-ban
-          :data="form"
-          @remove="onDelete"
-        />
-      </div>
+    <el-tabs
+      class="detail-khao-sat__tab"
+      v-model="tabActive"
+    >
+      <el-tab-pane
+        label="Tiếng việt"
+        id="vi"
+        name="vi"
+      >
+        <div class="detail-khao-sat__container">
+          <div class="col-12 detail-khao-sat__info">
+            <h3 class="detail-khao-sat__title"> Thông tin: </h3>
+            <form-phien-ban
+              :data="form"
+              @remove="onDelete"
+            />
+          </div>
 
-      <div class="col-12">
-        <h3 class="detail-khao-sat__title">
-          Phần câu hỏi:
-        </h3>
+          <div class="col-12">
+            <h3 class="detail-khao-sat__title">
+              Phần câu hỏi:
+            </h3>
+            <form-phan-cau-hoi
+              v-for="(item, index) in dataPhanCauHoi"
+              :key="index"
+              :data="item"
+              @remove="onRemove"
+            />
+          </div>
+        </div>
+      </el-tab-pane>
+       <el-tab-pane
+        label="English"
+        id="en"
+        name="en"
+      >
+        <div class="detail-khao-sat__container">
+          <div class="col-12">
+            <h3 class="detail-khao-sat__title"> Info: </h3>
+            <form-phien-ban
+              :data="form"
+              @remove="onDelete"
+              language="en"
+            />
+          </div>
 
-        <form-phan-cau-hoi
-          v-for="(item, index) in dataPhanCauHoi"
-          :key="index"
-          :data="item"
-          @remove="onRemove"
-        />
-      </div>
+          <div class="col-12">
+            <h3 class="detail-khao-sat__title">
+              Questions:
+            </h3>
+
+            <form-phan-cau-hoi
+              v-for="(item, index) in dataPhanCauHoi"
+              :key="index"
+              :data="item"
+              language="en"
+              @remove="onRemove"
+            />
+
+          </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+
+    <div class="detail-khao-sat__footer">
+      <el-button
+        type="primary"
+        plain
+        @click="addPhanCauHoi"
+      >
+        Thêm mới
+      </el-button>
     </div>
   </div>
 </template>
@@ -47,16 +98,6 @@ export default {
     }
   },
 
-  watch: {
-    data (data) {
-      this.form = {
-        ...data
-      }
-
-      this.initData()
-    }
-  },
-
   data: () => ({
     form: {},
     rules: {
@@ -68,27 +109,41 @@ export default {
         }
       ]
     },
-    dataPhanCauHoi: []
+    dataPhanCauHoi: [],
+    tabActive: 'vi'
   }),
 
+  watch: {
+    tabActive() {
+      this.initData(this.form.switch_phien_ban)
+    }
+  },
+
   created () {
-    this.initData()
+    this.initData(this.$route.query.id)
   },
 
   methods: {
-    ...mapActions('phanCauHoi', ['fetchList']),
-    ...mapActions('phienBanKhaoSat', ['handleDelete']),
+    ...mapActions('phanCauHoi', ['fetchPhanCauHoi']),
+    ...mapActions('phienBanKhaoSat', ['handleDelete', 'fetchKhaoSatById']),
 
-    initData () {
+    initData (id) {
       this.loading = true
-      this.fetchList({ phienban_id: this.data.phienban_id })
+      this.fetchKhaoSatById(id)
       .then((res) => {
-        this.dataPhanCauHoi = [
+        this.form = {
           ...res
-        ]
-        this.loading = false
+        }
+        this.tabActive = this.form.language
+        this.getPhanCauHoi()
+      }).catch(() => {
+        this.$message({
+          type: 'warning',
+          message: 'Phiên bản không tồn tại, hoặc đã tạm ngưng hoạt động!'
+        })
+        this.$router.back()
       })
-      this.loading = false
+      
     },
 
     onRemove (data) {
@@ -102,6 +157,33 @@ export default {
       .then((res) => {
         this.$router.back()
       })
+    },
+
+    getPhanCauHoi () {
+      this.fetchPhanCauHoi({
+        phien_ban_id: this.form.phien_ban_id,
+        language: this.form.language
+      }).then((res) => {
+        this.dataPhanCauHoi = [
+          ...res.data
+        ]
+      }).catch(() => {
+        this.$t({
+          type: 'warning',
+          message: this.$t('error.server')
+        })
+      })
+    },
+
+    addPhanCauHoi () {
+      this.dataPhanCauHoi = [
+        ...this.dataPhanCauHoi,
+        {
+          language: this.tabActive,
+          phien_ban_id: this.form.phien_ban_id,
+          status_phan_cau_hoi: 1
+        }
+      ]
     }
   }
 
@@ -123,6 +205,18 @@ export default {
       height: 40px;
       top: unset;
       bottom: 0;
+    }
+
+    &__tab {
+      padding: 0 15px;
+    }
+
+    &__footer {
+      padding: 15px;
+    }
+
+    &__info {
+      padding: 15px 0;
     }
   }
 </style>

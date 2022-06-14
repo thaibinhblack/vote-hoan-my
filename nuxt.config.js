@@ -84,6 +84,7 @@ export default {
     {src: "~/plugins/echarts", ssr: false},
     {src: "~/plugins/element-ui", ssr: false},
     {src: "~/plugins/bus.js", ssr: false},
+    {src: "~/plugins/voteSafe.js", ssr: false},
   ],
   /*
    ** Nuxt.js dev-modules

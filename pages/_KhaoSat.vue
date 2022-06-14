@@ -3,7 +3,7 @@
     v-loading="loading"
     class="page page-khao-sat"
   >
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div
           class="col-12"
@@ -17,6 +17,7 @@
             :roles="rolesFields"
             @create="onCreate"
             @delete="onDelete"
+            @reset="handleReset"
           />
         </div>
 
@@ -35,6 +36,21 @@
             >
               <template #action="{ data }">
                 <button
+                  class="page-khao-sat__btn"
+                  title="Group"
+                  @click="onUser(data)"
+                >
+                  <v-icon>mdi-account</v-icon>
+                </button>
+                <button
+                  class="page-khao-sat__btn"
+                  title="Preview"
+                  @click="onPreview(data)"
+                >
+                  <v-icon>mdi-eye</v-icon>
+                </button>
+                <button
+                  class="page-khao-sat__btn"
                   title="Chi tiết"
                   @click="onNext(data)"
                 >
@@ -45,7 +61,9 @@
 
             <custom-pagination
               class="page-khao-sat__pagination"
+              v-model="pagination"
               :total="list.length"
+              @change="handleChange"
             />
           </div>
         </div>
@@ -65,6 +83,12 @@
       :data="dataEdit"
       :title="title"
     />
+
+    <m-setting-user
+      v-model="settingUser"
+      :title="titleSettingUser"
+      :id="idPhienBan"
+    />
   </div>
 </template>
 
@@ -75,6 +99,8 @@ import CustomPagination from '@/components/Table/CustomPagination.vue'
 import MKhaoSatDetail from './KhaoSat/components/KhaoSatDetail.vue'
 import StepForm from './KhaoSat/StepForm.vue'
 import KhaoSatDetail from './KhaoSat/detail.vue'
+import MSettingUser from './KhaoSat/components/MSettingUser'
+
 import {
   mapState,
   mapGetters,
@@ -90,7 +116,8 @@ export default {
     CustomPagination,
     MKhaoSatDetail,
     StepForm,
-    KhaoSatDetail
+    KhaoSatDetail,
+    MSettingUser
   },
 
   middleware: "auth",
@@ -111,11 +138,15 @@ export default {
       create: false,
       delete: false
     },
-    selection: []
+    selection: [],
+    settingUser: false,
+    titleSettingUser: '',
+    idPhienBan: 0
   }),
 
   computed: {
-    ...mapState('phienBanKhaoSat', ['fields', 'columns']),
+    ...mapState('phienBanKhaoSat', ['fields', 'columns', 'pagination']),
+    ...mapGetters(['user']),
     ...mapGetters('phienBanKhaoSat', ['list']),
 
     fieldsSearch () {
@@ -133,7 +164,11 @@ export default {
         ...data.query
       }
       this.initData()
-    } 
+    },
+
+    user () {
+      this.initNhanVien()
+    }
   },
 
   created () {
@@ -142,38 +177,57 @@ export default {
   },
 
   methods: {
-    ...mapActions('phienBanKhaoSat', ['fetchListKhaoSat', 'fetchKhaoSat', 'deletePhienBan']),
-    ...mapActions('phanCauHoi', ['fetchList']),
+    ...mapActions('phienBanKhaoSat', ['fetchListKhaoSat', 'deletePhienBan']),
+    ...mapActions('phanCauHoi', ['fetchPhanCauHoi']),
+    ...mapActions('benhVien', ['fetchListBenhVien']),
+    ...mapActions('nhanVien', ['queryNhanVien']),
+
 
     initData () {
       this.loading = true
       this.query = {
         ...this.$route.query
       }
-      if (this.query.id) {
-        this.rolesFields = {
-          create: false,
-          delete: false
-        }
-        this.fetchKhaoSat({phienban_id: this.query.id})
-        .then((res) =>{
-          this.data = {
-            ...res
-          }
-        })
-        .catch((err) => {
-          this.onBack()
-        })
-      } else {
-        this.rolesFields = {
-          create: true,
-          delete: true,
-          export: true
-        }
-        this.fetchListKhaoSat()
+      this.rolesFields = {
+        create: true,
+        delete: true,
+        export: true
       }
+
+      Promise.all([
+        this.initPhienBanKhaoSat(),
+        this.fetchListBenhVien(),
+        this.initNhanVien()
+      ])
       
       this.loading = false
+    },
+
+    initPhienBanKhaoSat (params = {}) {
+      this.loading = true
+      this.fetchListKhaoSat({
+        ...params,
+        language: this.$i18n.loadedLanguages[0]
+      })
+        .then(() =>{
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+          this.$message({
+            type: 'warning',
+            message: 'Xảy ra lỗi! Liên hệ với bộ phận IT để xử lý!!'
+          })
+        })
+    },
+
+    initNhanVien () {
+      if (this.user.hospital) {
+        this.queryNhanVien({
+          get_all: true,
+          hospital_id: this.user.hospital.hospital_id
+        })
+      }
     },
 
     handleEdit (data) {
@@ -186,19 +240,11 @@ export default {
 
     onNext (data) {
       this.loading = true
-      this.titlePage = `Thông tin phiên bản: ${data.tieude_khaosat}`
+      this.titlePage = `Thông tin phiên bản: ${data.tieu_de_khao_sat}`
       this.data = {
         ...data
       }
-      this.fetchList().then((res) => {
-        this.listPhanCauHoi = [
-          ...res
-        ]
-        this.loading = false
-        this.$router.push(`khao-sat?id=${data.phienban_id}`)
-      }).catch((err) => {
-        this.loading = false
-      })
+      this.$router.push(`khao-sat?id=${data.phien_ban_id}`)
     },
 
     onBack () {
@@ -232,37 +278,69 @@ export default {
       let width = window.innerWidth
 
       if (width > 991) this.$store.dispatch('setIsMobile', false)
-      else this.$store.dispatch('setIsMobile', true)
+    else this.$store.dispatch('setIsMobile', true)
     },
 
     handleDelete (data) {
-      this.$confirm(`Bạn có muốn xóa "${data.tieude_khaosat}?"`)
-      .then(() => {
-        this.deletePhienBan(data)
+      if (data.status_khao_sat === 1) {
+        this.$confirm(`Bạn muốn tạm ngưng hoạt động phiên bản khảo sát: "${data.tieu_de_khao_sat}?"`)
+        .then(() => {
+          this.loading = true
+          this.deletePhienBan({
+            phien_ban_id: data.phien_ban_id
+          })
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: 'Cập nhật thành công'
+            })
+            this.loading = false
+          }).catch(() => {
+            this.$message({
+              type: 'warning',
+              message: this.$t('error.server')
+            })
+            this.loading = false
+          })
+        })
+      }
+      else this.$message({
+        type: 'warning',
+        message: 'Phiên bản khảo sát này đã tạm ngưng hoạt động!'
       })
+    },
+
+    onUser (data) {
+      if (data.status_khao_sat === 1) {
+        this.settingUser = true
+        this.titleSettingUser = `Cài đặt người dùng tham gia khảo sát "${data.tieu_de_khao_sat}"`
+        this.idPhienBan = data.phien_ban_id
+      } else {
+        this.$message({
+          type: 'warning',
+          message: 'Phiên bản khảo sát này đã tạm ngưng hoạt động!'
+        })
+      }
+    },
+
+    onPreview () {},
+
+    handleReset () {
+      this.initData()
+    },
+
+    handleChange (data) {
+      const params = {
+        top: this.pagination.per_page,
+        page: this.pagination.current_page,
+        ...data
+      }
+      this.initPhienBanKhaoSat(params)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.page-khao-sat {
-  min-height: calc(100vh - 48px);
-  background-color: #e2e2e2;
-
-  &__pagination {
-    padding: 15px 0;
-  }
-
-  &__step-form {
-    width: 100%;
-  }
-
-  &__content {
-    padding: 25px 15px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: -1px 3px 3px #e2e2e2;
-  }
-}
+@import '@/pages/KhaoSat/style.scss';
 </style>

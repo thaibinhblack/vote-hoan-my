@@ -29,7 +29,7 @@ export const state = () => ({
       label: 'Tiêu đề'
     },
     {
-      key: 'status_khaosat',
+      key: 'status_khao_sat',
       field: 'select',
       placeholder: 'Trạng thái',
       list: [
@@ -51,57 +51,66 @@ export const state = () => ({
   columns: [
     {
       label: 'ID',
-      column: 'phienban_id',
+      column: 'phien_ban_id',
       align: 'center',
       width: 60
     },
     {
-      label: 'URK Khảo sát',
-      column: 'url_khaosat',
-      align: 'center',
-      width: 130
-    },
-    {
       label: 'Tiêu đề',
-      column: 'tieude_khaosat',
+      column: 'tieu_de_khao_sat',
+      width: 180
     },
     {
       label: 'Mô tả',
-      column: 'mota_khaosat',
+      column: 'mo_ta_khao_sat',
+    },
+    {
+      label: 'Nội dung',
+      column: 'noi_dung_khao_sat',
     },
     {
       label: 'Trạng thái',
-      column: 'trang_thai_text',
+      column: 'status_khao_sat',
       align: 'center',
+      format: {
+        type: 'data',
+        data: [
+          {
+            label: 'Đang hoạt động',
+            value: 1,
+            class: '--txt-success'
+          },
+          {
+            label: 'Ngưng hoạt động',
+            value: 2,
+            class: '--txt-danger'
+          }
+        ]
+      },
+      width: 120
     },
     {
       label: 'Ngày kết thúc',
       column: 'time_end',
       align: 'center',
-    },
-    {
-      label: 'Ngày tạo',
-      column: 'created_at',
-      align: 'center',
-      width: 140
+      format: {
+        type: 'time'
+      },
+      width: 150
     }
-  ]
+  ],
+  pagination: {}
 })
 
 export const getters = {
   list: (state) => {
-    console.log('getter', state.list)
-    return state.list.map(item => ({
-      ...item,
-      trang_thai_text: 
-        item.status_khaosat === 1
-        ? 'Đang hoạt động'
-        : (
-            item.status_khaosat === 2 
-            ? 'Ngừng hoạt động'
-            : 'Chưa cập nhật'
-          )
-    }))
+    return state.list.reduce((arr, key, index) => ([
+      ...arr,
+      {
+        ...key,
+        index: index + 1
+      }
+    ]), [])
   }
 }
 
@@ -116,6 +125,12 @@ export const mutations = {
     state.list = [
       ...payload
     ]
+  },
+
+  SET_PAGINATION: (state, payload) => {
+    state.pagination = {
+      ...payload
+    }
   },
 
   CREATE_DATA: (state, payload) => {
@@ -163,79 +178,153 @@ export const actions = {
   setList: ({ commit }, payload) => {
     commit("SET_LIST", payload)
   },
+  setPagination: ({ commit }, payload) => {
+    commit('SET_PAGINATION', payload)
+  },
 
-
-  fetchKhaoSat: ({ dispatch }, params = {}) => {
-    const result = {
-      phienban_id: 1,
-      url_khaosat: '/khaosat?phienban_id=1',
-      status_khaosat: 1,
-      time_start: '08:00:00 07/05/2022',
-      time_end: '10:00:00 07/05/2022',
-      tieude_khaosat: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
-      mota_khaosat: 'Bản dịch được sự cho phép của Tổ chức AHRQ tại Mỹ (the United States Agency for Healthcare Research and Quality'
-    }
-
-    return new Promise((resolve, reject) => {
+  fetchKhaoSat: ({ dispatch }) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        dispatch('setData', result)
-        resolve(result)
+        await this.$voteSafe.phienban
+          .getPhienBanKhaoSat()
+          .then((res) => {
+            console.log('res', res)
+            dispatch('setData', res.data)
+            resolve(result)
+          })
       } catch (error) {
         reject(error)
       }
     })
   },
 
-  fetchListKhaoSat: ({ dispatch }, params = {}) => {
-    const result = [
-      {
-        phienban_id: 1,
-        url_khaosat: '/khaosat?phienban_id=1',
-        time_start: '08:00:00 07/05/2022',
-        time_end: '10:00:00 07/05/2022',
-        tieude_khaosat: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
-        status_khaosat: 2,
-        mota_khaosat: 'Bản dịch được sự cho phép của Tổ chức AHRQ tại Mỹ (the United States Agency for Healthcare Research and Quality'
-      },
-      {
-        phienban_id: 2,
-        url_khaosat: '/khaosat?phienban_id=1',
-        time_start: '08:00:00 07/05/2022',
-        time_end: '10:00:00 07/05/2022',
-        tieude_khaosat: 'BÌNH CHỌN VÌ AN TOÀN  - VOTE FOR SAFETY (Phiên bản 2) - HMSG',
-        status_khaosat: 1,
-        mota_khaosat: 'Bản dịch được sự cho phép của Tổ chức AHRQ tại Mỹ (the United States Agency for Healthcare Research and Quality'
-      }
-    ]
-
-    dispatch('setList', result)
-  },
-  
-  updatePhienBan: ({ commit }, payload) => {
-    commit('UPDATE_DATA', payload)
-  },
-  
-  createPhienBan: ({ commit, state }, payload) => {
-    const data = {
-      phienban_id: state.list.length + 1,
-      ...payload
-    }
-    commit('CREATE_DATA', data)
-  },
-
-  deletePhienBan: ({ commit }, payload) => {
-    console.log('delete', payload)
-    commit('DELETE_DATA', payload)
-  },
-
-  handleDelete: ({ dispatch }, payload) => {
-    return new Promise((resolve, reject) => {
+  fetchKhaoSatById ({ dispatch }, id) {
+    return new Promise(async (resolve, reject) => {
       try {
-        dispatch('deletePhienBan', payload)
-        resolve()
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phienban
+          .apiGetPhienBanById(id)
+          .then((res) => {
+            dispatch('root/setLoading', false, { root: true })
+            if (res.data.code === 200) {
+              resolve(res.data.data)
+            } else {
+              reject(res.data)
+            }
+          })
       } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
         reject(error)
       }
+    })
+  },
+
+  fetchListKhaoSat ({ dispatch }, params = {}) {
+    return new Promise(async (resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      console.log('params', params)
+      try {
+        this.$voteSafe.phienban
+          .apiGetPhienBanKhaoSat(params)
+          .then((res) => {
+            dispatch('root/setLoading', false, { root: true })
+            dispatch('setList',res.data.data)
+            dispatch('setPagination',res.data.paging)
+            resolve(res.data)
+          })
+          .catch((err) => {
+            dispatch('root/setLoading', false, { root: true })
+            reject(err)
+          })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
+    })
+  },
+  
+  createPhienBan({ dispatch }, payload) {
+    return new Promise(async (resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      try {
+        payload = {
+          ...payload,
+          time_start: this.$moment(payload.time_start).format('YYYY-MM-DD hh:mm:ss'),
+          time_end: this.$moment(payload.time_end).format('YYYY-MM-DD hh:mm:ss')
+        }
+        this.$voteSafe.phienban
+        .apiCreatePhienBanKhaoSat(payload)
+        .then((res) => {
+          if(res.data.code === 200) {
+            dispatch('fetchListKhaoSat')
+            resolve(res.data)
+          } else {
+            dispatch('root/setLoading', false, { root: true })
+            reject(res.data)
+          }
+        })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
+    })
+  },
+
+  updatePhienBan({ dispatch }, payload) {
+    dispatch('root/setLoading', true, { root: true })
+    payload = {
+      ...payload,
+      time_start: this.$moment(payload.time_start).format('YYYY-MM-DD hh:mm:ss'),
+      time_end: this.$moment(payload.time_end).format('YYYY-MM-DD hh:mm:ss')
+    }
+    return new Promise(async (resolve, reject) => {
+      this.$voteSafe.phienban
+      .apiUpdatePhienBanKhaoSat(payload)
+        .then((res) => {
+          if (res.data.code === 200) {
+            dispatch('fetchListKhaoSat')
+            resolve(res.data)
+          } else {
+            dispatch('root/setLoading', false, { root: true })
+            reject(res.data)
+          }
+        }).catch((err) => {
+          dispatch('root/setLoading', false, { root: true })
+          reject(err)
+        })
+    })
+  },
+
+  deletePhienBan({ dispatch }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phienban
+        .apiDeletePhienBan(payload)
+          .then((res) => {
+            
+            if(res.data.code === 200) {
+              dispatch('fetchListKhaoSat')
+              resolve(res.data)
+            } else {
+              dispatch('root/setLoading', false, { root: true })
+              reject(res.data)
+            }
+          })
+          .catch((err) => {
+            dispatch('root/setLoading', false, { root: true })
+            reject(err)
+          })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
+    })
+  },
+
+  setNhanVienKhaoSat ({ dispatch }, payload)  {
+    return new Promise(async(resolve, reject) => {
+      
     })
   }
 }

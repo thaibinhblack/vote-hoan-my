@@ -1,8 +1,9 @@
 <template>
   <div class="custom-table">
     <el-table
-      v-model="value"
+      v-model="selection"
       :data="data"
+      ref="multipleTable"
       @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -19,13 +20,34 @@
         :label="item.label"
         :width="item.width"
         :align="item.align"
-      />
+      >
+        <template slot-scope="{row}">
+          <span
+            :class="item.class"
+            v-if="!item.format"
+          >
+            {{ row[item.column] }}
+          </span>
+          <div
+            :class="[item.class, formatData(item.format, row[item.column]).class || '']"
+            v-else
+          >
+            {{ formatData(item.format, row[item.column]).label || formatData(item.format, row[item.column]) }}
+          </div>
+        </template>
+      </el-table-column>
 
       <el-table-column
+        v-if="action"
         prop="action"
         label="Action"
-        width="120"
+        width="160"
       >
+        <template #header>
+          <div>
+            
+          </div>
+        </template>
         <template slot-scope="{row}">
           <button
             class="custom-table__btn-action"
@@ -77,10 +99,55 @@ export default {
     checkbox: {
       type: Boolean,
       default: false
+    },
+
+    action: {
+      type: Boolean,
+      default: true
+    },
+
+    selected: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+
+  computed: {
+    selection: {
+      get () {
+        return this.value
+      },
+
+      set (val) {
+        this.$emit('input', val)
+      }
+    }
+  },
+
+  watch: {
+    selected (data) {
+      this.toggleSelection(data)
+    },
+
+    data () {
+      console.log('data', this.selected)
+      this.toggleSelection(this.selected)
     }
   },
 
   methods: {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        });
+
+        if (rows.length === 0) this.$refs.multipleTable.clearSelection()
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+
     handleSelectionChange (val) {
       this.$emit('input', val)
     },
@@ -91,7 +158,22 @@ export default {
 
     onDelete (data) {
       this.$emit('delete', data)
-    } 
+    },
+
+    formatData (format, data) {
+      let result = data
+      switch (format.type) {
+        case 'time':
+          result = this.$moment(data).format('DD/MM/YYYY hh:mm:ss')
+          break
+        case 'data':
+          const item = format.data.find((item) => item.value === data)
+          result = item || { label: '' }
+        default:
+          break
+      }
+      return result
+    }
   }
 }
 </script>

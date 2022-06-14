@@ -23,7 +23,8 @@ export const state = () => ({
       label: 'Ngưng hoạt động',
       value: 2
     }
-  ]
+  ],
+  pagination: {}
 })
 
 export const getters = {
@@ -40,6 +41,12 @@ export const mutations = {
     state.list = [
       ...payload
     ]
+  },
+
+  SET_PAGINATION: (state, payload) => {
+    state.pagination = {
+      ...payload
+    }
   }
 }
 
@@ -47,82 +54,78 @@ export const actions = {
   setList: ({ commit }, payload) => {
     commit('SET_LIST', payload)
   },
+  setPagination: ({commit }, payload) => {
+    commit('SET_PAGINATION', payload)
+  },
 
-  fetchList: ({ dispatch }, params = {}) => {
-    const result = [
-      {
-        phan_cauhoi_id: 1,
-        ten_cauhoi: 'PHẦN T: VỊ TRÍ CÔNG VIỆC CỦA ANH / CHỊ',
-        mota_cauhoi: 'Lưu ý: Con số đứng trước mỗi chức danh trong câu trả lời bên dưới được hiểu là mã số qui ước dựa trên phiên bản của tổ chức AHRQ',
-        giatri_cauhoi: 'T',
-        phienban_id: 1,
-        phanloai: 'radio'
-      },
-      {
-        phan_cauhoi_id: 2,
-        ten_cauhoi: 'PHẦN A: Ý KIẾN VỀ KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'A',
-        phienban_id: 1,
-        phanloai: 'radio'
-      },
-      {
-        phan_cauhoi_id: 3,
-        ten_cauhoi: 'PHẦN  B: Ý KIẾN VỀ NGƯỜI QUẢN LÝ KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'B',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 4,
-        ten_cauhoi: 'PHẦN C: Ý KIẾN VỀ VẤN ĐỀ TRAO ĐỔI THÔNG TIN TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ. ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'C',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 5,
-        ten_cauhoi: 'PHẦN D: Ý KIẾN VỀ BÁO CÁO SỰ CỐ TẠI KHOA/PHÒNG/ĐƠN VỊ CỦA ANH/CHỊ',
-        mota_cauhoi: 'Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn. ',
-        giatri_cauhoi: 'D',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 6,
-        ten_cauhoi: 'PHẦN E: ĐÁNH GIÁ MỨC ĐỘ AN TOÀN',
-        mota_cauhoi: 'Đánh giá mức độ an toàn người bệnh tại khoa/phòng/đơn vị làm việc của Anh/Chị <br /> Lưu ý: Nếu anh/chị làm việc ở nhiều khoa/phòng/đơn vị cùng lúc thì chọn khoa/phòng/đơn vị nào mà thời gian anh/chị làm việc tại đó nhiều hơn',
-        giatri_cauhoi: 'E',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 7,
-        ten_cauhoi: 'PHẦN F: Ý KIẾN VỀ BỆNH VIỆN/PHÒNG KHÁM CỦA ANH/CHỊ',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'F',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 8,
-        ten_cauhoi: 'PHẦN G: THÔNG TIN CÁ NHÂN',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'G',
-        phienban_id: 1
-      },
-      {
-        phan_cauhoi_id: 9,
-        ten_cauhoi: 'PHẦN H: Ý KIẾN CÁ NHÂN',
-        mota_cauhoi: '',
-        giatri_cauhoi: 'H',
-        phienban_id: 1
-      }
-    ]
-
-    return new Promise((resolve, reject) => {
+  fetchPhanCauHoi({ dispatch }, params = {}) {
+    return new Promise(async (resolve, reject) => {
       try {
-        dispatch('setList', result)
-        resolve(result)
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phancauhoi.apiGetPhanCauHoi(params)
+        .then((res) => {
+          dispatch('root/setLoading', false, { root: true })
+          if (res.data.code === 200) {
+            dispatch('setList', res.data.data)
+            dispatch('setPagination', res.data.paging)
+            
+            resolve(res.data)
+          } else {
+            reject(res.data)
+          }
+        }).catch((err) => {
+          dispatch('root/setLoading', false, { root: true })
+          reject(err)
+        }) 
       } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
         reject(error)
+      }
+    })
+  },
+
+  createPhanCauHoi ({ dispatch }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phancauhoi.apiCreatePhanCauHoi(payload)
+        .then((res) => {
+          dispatch('root/setLoading', false, { root: true })
+          if (res.data.code === 200) {
+            resolve(res.data)
+          } else {
+            reject(res.data)
+          }
+        }).catch((err) => {
+          dispatch('root/setLoading', false, { root: true })
+          reject(err)
+        })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      }
+    })
+  },
+  
+  updatePhanCauHoi ({ dispatch }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.phancauhoi.apiUpdatePhanCauHoi(payload)
+        .then((res) => {
+          dispatch('root/setLoading', false, { root: true })
+          if (res.data.code === 200) {
+            resolve(res.data)
+          } else {
+            reject(res.data)
+          }
+        }).catch((err) => {
+          dispatch('root/setLoading', false, { root: true })
+          reject(err)
+        })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
       }
     })
   }
