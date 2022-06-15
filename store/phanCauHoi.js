@@ -68,12 +68,12 @@ export const actions = {
           if (res.data.code === 200) {
             dispatch('setList', res.data.data)
             dispatch('setPagination', res.data.paging)
-            
             resolve(res.data)
           } else {
             reject(res.data)
           }
         }).catch((err) => {
+          console.log('api phan cau hoi', err)
           dispatch('root/setLoading', false, { root: true })
           reject(err)
         }) 
@@ -108,6 +108,7 @@ export const actions = {
   },
   
   updatePhanCauHoi ({ dispatch }, payload) {
+    console.log('call update')
     return new Promise(async (resolve, reject) => {
       try {
         dispatch('root/setLoading', true, { root: true })
@@ -127,6 +128,25 @@ export const actions = {
         dispatch('root/setLoading', false, { root: true })
         reject(err)
       }
+    })
+  },
+
+  deletePhanCauHoi ({ dispatch }, id) {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.phancauhoi.apiDeletePhanCauHoi(id)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
     })
   }
 }

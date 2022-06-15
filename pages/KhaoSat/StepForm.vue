@@ -111,6 +111,23 @@ export default {
     BoxForm
   },
 
+  props: {
+    data: {
+      type: Object,
+      default: () => ({})
+    },
+
+    phanCauHois: {
+      type: Array,
+      default: () => ({})
+    },
+
+    dapans: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+
   name: 'StepForm',
 
   data: () => ({
@@ -133,19 +150,16 @@ export default {
   }),
 
   computed: {
-    ...mapState('cauHoi', ['list']),
-    ...mapState('phienBanKhaoSat', ['data']),
     ...mapState('dapanCauHoi', ['dapan']),
-    ...mapGetters('phanCauHoi', ['LIST_LABEL']),
 
     stepsCauHoi () {
-      return this.$store.state.phanCauHoi.list.reduce((arr, key, idx) => ([
+      return this.phanCauHois.reduce((arr, key, idx) => ([
         ...arr,
         [
           {
-            title: key.ten_cauhoi,
-            description: key.mota_cauhoi,
-            label: key.giatri_cauhoi,
+            title: key.ten_phan_cau_hoi,
+            description: key.mo_ta_phan_cau_hoi,
+            label: key.gia_tri_phan_cau_hoi,
             config: {
               border: true,
               title: {
@@ -153,20 +167,21 @@ export default {
               }
             }
           },
-          ...this.list.filter((item) => item.phancauhoi_id === key.phan_cauhoi_id).reduce((arr, key) => ([
+          ...key.cau_hois.reduce((arr, key_cau_hois) => ([
             ...arr,
             {
-              id: key.cauhoi_id,
-              stt: key.stt_cauhoi,
+              id: key_cau_hois.cau_hoi_id,
+              stt: key_cau_hois.stt_cau_hoi,
               question: {
-                number: key.stt_cauhoi,
-                title: key.ten_cauhoi,
+                number: key_cau_hois.stt_cau_hoi,
+                title: key_cau_hois.ten_cau_hoi,
                 answers: [
-                  ...this.dapan.filter((item) => item.cauhoi_id === key.cauhoi_id).reduce((arr, da) => ([
+                  ...this.dapans.filter((item) => item.cau_hoi_id === key_cau_hois.cau_hoi_id)
+                  .reduce((arr, key) => ([
                     ...arr,
                     {
-                      label: da.ten_dapan,
-                      value: da.value_dapan
+                      label: key.ten_dap_an,
+                      value: key.dap_an_id
                     }
                   ]), [])
                 ]
@@ -181,8 +196,8 @@ export default {
       const data =  [
         [
           {
-            title: this.data.tieude_khaosat || '',
-            description: this.data.mota_khaosat || '',
+            title: this.data.tieu_de_khao_sat || '',
+            description: this.data.mo_ta_khao_sat || '',
             config: {
               border: true,
               title: {
@@ -191,7 +206,7 @@ export default {
             }
           },
           {
-            description: 'Bình chọn này nhằm thăm dò ý kiến của bạn về các vấn đề an toàn của người bệnh, sự cố và báo cáo sự cố tại Khoa/Phòng/ Đơn vị và Bệnh viện/Phòng khám của Anh/Chị. Để hoàn thành bình chọn này, Anh/Chị chỉ mất khoảng 10-15 phút. Nếu một câu hỏi không áp dụng đối với Khoa/Phòng/Đơn vị hoặc Bệnh viện/Phòng khám của Anh/Chị hoặc Anh/Chị không biết câu trả lời, vui lòng chọn “Không áp dụng hoặc không biết”.'
+            description: this.data.noi_dung_khao_sat
           },
         ],
         ...this.stepsCauHoi

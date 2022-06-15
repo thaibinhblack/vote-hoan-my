@@ -88,6 +88,7 @@
       v-model="settingUser"
       :title="titleSettingUser"
       :id="idPhienBan"
+      :switch_phien_ban="switch_phien_ban"
     />
   </div>
 </template>
@@ -141,7 +142,8 @@ export default {
     selection: [],
     settingUser: false,
     titleSettingUser: '',
-    idPhienBan: 0
+    idPhienBan: 0,
+    switch_phien_ban: 0
   }),
 
   computed: {
@@ -244,7 +246,12 @@ export default {
       this.data = {
         ...data
       }
-      this.$router.push(`khao-sat?id=${data.phien_ban_id}`)
+      this.$router.push({
+        path: 'KhaoSat',
+        query: {
+          id: this.data.phien_ban_id
+        }
+      })
     },
 
     onBack () {
@@ -315,6 +322,7 @@ export default {
         this.settingUser = true
         this.titleSettingUser = `Cài đặt người dùng tham gia khảo sát "${data.tieu_de_khao_sat}"`
         this.idPhienBan = data.phien_ban_id
+        this.switch_phien_ban = data.switch_phien_ban
       } else {
         this.$message({
           type: 'warning',

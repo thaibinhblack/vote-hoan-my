@@ -1,20 +1,20 @@
-const SERVICE = '/votesafety/v1/phan-cau-hoi'
+const SERVICE = '/votesafety/v1/cau-hoi'
 
 export default function makeServices(axios) {
   return {
-    apiCreatePhanCauHoi (data) {
+    apiCreateCauHoi (data) {
       return axios.post(`${SERVICE}`, data)
     },
 
-    apiGetPhanCauHoi (params) {
+    apiGetCauHoi (params) {
       return axios.get(`${SERVICE}`, { params })
     },
 
-    apiUpdatePhanCauHoi(data) {
+    apiUpdateCauHoi (data) {
       return axios.put(`${SERVICE}`, data)
     },
 
-    apiDeletePhanCauHoi(id) {
+    apiDeleteCauHoi (id) {
       return axios.delete(`${SERVICE}/${id}`)
     }
   }

@@ -89,6 +89,11 @@ export default {
     id: {
       type: Number,
       default: 0
+    },
+
+    switch_phien_ban: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -236,7 +241,8 @@ export default {
           tai_khoan_ids: ids,
           hospital_id: this.user.hospital.hospital_id,
           phien_ban_id: this.id,
-          nhan_vien_ids: nvids
+          nhan_vien_ids: nvids,
+          switch_phien_ban: this.switch_phien_ban
         }).then((res) => {
           this.$message({
             type: 'success',

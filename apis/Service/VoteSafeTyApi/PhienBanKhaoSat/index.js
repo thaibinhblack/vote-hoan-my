@@ -1,4 +1,4 @@
-const SERVICE = '/phien-ban-khao-sat'
+const SERVICE = '/votesafety/v1/phien-ban-khao-sat'
 
 export default function makeServices(axios) {
   return {
@@ -21,5 +21,9 @@ export default function makeServices(axios) {
     apiDeletePhienBan (data) {
       return axios.put(`${SERVICE}/delete`, data)
     },
+
+    apiDeletePhienBanById (id) {
+      return axios.delete(`${SERVICE}/${id}`)
+    }
   }
 }
