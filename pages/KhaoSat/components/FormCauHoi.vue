@@ -356,8 +356,15 @@ export default {
     },
 
     showAnswer () {
-      this.title = `Đáp án câu hỏi ${this.data.ten_cau_hoi}`
-      this.open = true
+      if (this.form.cau_hoi_id) {
+        this.title = `Đáp án câu hỏi ${this.form.ten_cau_hoi}`
+        this.open = true
+      } else {
+        this.$message({
+          type: 'warning',
+          message: `Bạn chưa lưu lại câu hỏi ${this.form.ten_cau_hoi || ''}!`
+        })
+      }
     },
 
     handleChangeSTT () {
