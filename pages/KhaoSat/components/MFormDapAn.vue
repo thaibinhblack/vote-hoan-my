@@ -20,6 +20,7 @@
 
     <div class="col-12 m-form-dap-an__action-cotnainer">
       <el-button
+        v-if="language === 'vi'"
         type="primary"
         plain
         @click="onPlus"
@@ -55,6 +56,11 @@ export default {
     value: {
       type: Boolean,
       default: false
+    },
+
+    language: {
+      type: String,
+      default: 'vi'
     },
 
     title: {

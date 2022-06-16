@@ -198,12 +198,12 @@ export const actions = {
     })
   },
 
-  fetchKhaoSatById ({ dispatch }, id) {
+  fetchKhaoSatById ({ dispatch }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
         dispatch('root/setLoading', true, { root: true })
         await this.$voteSafe.phienban
-          .apiGetPhienBanById(id)
+          .apiGetPhienBanById(payload)
           .then((res) => {
             dispatch('root/setLoading', false, { root: true })
             if (res.data.code === 200) {

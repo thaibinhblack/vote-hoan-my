@@ -74,6 +74,7 @@
     ...mapActions('NhanVienKhaoSat', ['checkPhienBan']),
 
     checkNhanVienKhaoSat () {
+      console.log('i18n', this.$i18n.localeProperties.code)
       this.loading = true
       this.checkPhienBan({
         tai_khoan_id: this.user.tai_khoan_id,
@@ -105,7 +106,10 @@
         this.$router.back()
       } else {
         this.loading = true
-        this.fetchKhaoSatById(this.$route.query.id)
+        this.fetchKhaoSatById({
+          id: this.$route.query.id,
+          language: this.$i18n.localeProperties.code
+        })
         .then((res) => {
           this.data = {
             ...res

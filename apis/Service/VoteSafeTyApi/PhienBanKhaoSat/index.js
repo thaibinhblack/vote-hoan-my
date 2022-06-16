@@ -6,8 +6,8 @@ export default function makeServices(axios) {
       return axios.get(`${SERVICE}`, { params })
     },
 
-    apiGetPhienBanById (id) {
-      return axios.get(`${SERVICE}/${id}`)
+    apiGetPhienBanById (params) {
+      return axios.get(`${SERVICE}/${params.id}/${params.language}`,)
     },
 
     apiCreatePhienBanKhaoSat (data) {
