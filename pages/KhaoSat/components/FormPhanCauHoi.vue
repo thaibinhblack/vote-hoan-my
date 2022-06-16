@@ -195,12 +195,14 @@ import {
   mapActions
 } from 'vuex'
 import FormCauHoi from './FormCauHoi.vue'
+import BaseEditor from '@/components/Editor/BaseEditor.vue'
 
 export default {
   name: 'FormPhanCauHoi',
 
   components: {
-    FormCauHoi
+    FormCauHoi,
+    BaseEditor
   },
 
   props: {

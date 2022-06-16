@@ -3,24 +3,35 @@
     v-loading="loading"
     class="step-form-khao-sat"
   >
-    <step-form
-      v-if="data.status_khao_sat === 1"
-      :data="data"
-      :phanCauHois="phanCauHois"
-      :dapans="dapans"
-    />
-
     <div
-      v-else
-      class="step-form-khao-sat__modal"
+      v-if="checkUser"
+      class="step-form-khao-sat__container"
     >
-      Phiên bản khảo sát đã ngưng hoạt động
+      <step-form
+        v-if="data.status_khao_sat === 1"
+        :data="data"
+        :phanCauHois="phanCauHois"
+        :dapans="dapans"
+      />
+
+      <div
+        v-else
+        class="step-form-khao-sat__modal"
+      >
+        Phiên bản khảo sát đã ngưng hoạt động
+      </div>
     </div>
+
+    <div class="step-form-khao-sat__not-foud">
+      <h3>Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!</h3>
+    </div>
+    
   </div>
 </template>
 
  <script>
  import {
+  mapGetters,
   mapActions
  } from 'vuex'
 
@@ -38,17 +49,43 @@
   data: () => ({
     data: {},
     phanCauHois: [],
-    dapans: []
+    dapans: [],
+    loading: false,
+    checkUser: false
   }),
 
+  computed: {
+    ...mapGetters(['user'])
+  },
+
   created () {
-    this.fetchPhienBanKhaoSat()
+    this.checkNhanVienKhaoSat()
   },
 
   methods: {
     ...mapActions('phienBanKhaoSat', ['fetchKhaoSatById']),
     ...mapActions('phanCauHoi', ['fetchPhanCauHoi']),
     ...mapActions('dapanCauHoi', ['queryDapAn']),
+    ...mapActions('NhanVienKhaoSat', ['checkPhienBan']),
+
+    checkNhanVienKhaoSat () {
+      this.loading = true
+      this.checkPhienBan({
+        tai_khoan_id: this.user.tai_khoan_id,
+        phien_ban_id: this.$route.query.id
+      }).then((res) => {
+        this.checkUser = true
+        this.fetchPhienBanKhaoSat()
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: `Tài khoản của bạn chưa được tham gia khảo sát phiên bản này!`
+        })
+        this.checkUser = false
+        this.loading = false
+      })
+    },
 
     fetchPhienBanKhaoSat () {
       if (!this.$route.query.id) {
@@ -92,8 +129,12 @@
  </script>
 
  <style lang="scss">
+  .page-wrapper {
+    height: 100%;
+  }
   .step-form-khao-sat {
     position: relative;
+    height: 100%;
   
     &__modal {
       position: absolute;
@@ -107,6 +148,11 @@
       border-radius: 10px;
       font-size: 22px;
       border: 1px solid #e2e2e2;
+    }
+
+    &__not-foud {
+      padding: 100px 50px;
+      text-align: center;
     }
   }
  </style>

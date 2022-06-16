@@ -27,27 +27,21 @@
 
       <el-form-item
         prop="mo_ta_khao_sat"
-        label="Mô tả khảo sát"
       >
-        <el-input
-          type="textarea"
-          placeholder="Nhập mô tả khảo sát"
+        <p>Mô tả</p>
+        <vue-editor
+          class="form-phien-ban__description"
           v-model="form.mo_ta_khao_sat"
-          :rows="4"
-          :disabled="isDisabled"
         />
       </el-form-item>
 
       <el-form-item
         prop="noi_dung_khao_sat"
-        label="Nội dung khảo sát"
       >
-        <el-input
-          type="textarea"
-          v-model="form.noi_dung_khao_sat"
-          placeholder="Nhập nội dung khảo sát"
-          :rows="4"
-          :disabled="isDisabled"
+        <p>Nội dung</p>
+        <vue-editor
+          class="form-phien-ban__description"
+          v-model="form.mo_ta_khao_sat"
         />
       </el-form-item>
 
@@ -131,9 +125,12 @@ import {
   mapState,
   mapActions
 } from 'vuex'
+import { VueEditor, Quill } from "vue2-editor"
 
 export default {
   name: 'MKhaoSatDetail',
+
+  components: { VueEditor, Quill },
 
   props: {
     value: {
@@ -339,8 +336,9 @@ export default {
 <style lang="scss">
 .khao-sat-detail {
   &__form {
-    height: calc(100vh - 150px);
     padding: 15px;
+    max-height: calc(100vh - 140px);
+    overflow: hidden scroll;
   }
 
   &__select {
@@ -349,7 +347,8 @@ export default {
   }
 
   &__footer {
-    padding: 0 15px;
+    border-top: 1px solid #e2e2e2;
+    padding: 15px;
   }
 
   .el-drawer__header {
@@ -367,6 +366,10 @@ export default {
       height: 40px;
       top: 40px
     }
+  }
+
+  .el-drawer__body {
+    overflow: hidden;
   }
 }
 </style>

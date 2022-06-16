@@ -42,6 +42,7 @@
     "vue-pdf": "^4.2.0",
     "vue-socket.io": "^3.0.10",
     "vue-socket.io-extended": "^2.0.3",
+    "vue2-editor": "^2.10.3",
     "vuetify": "^2.5.3"
   },
   "devDependencies": {

@@ -237,10 +237,6 @@ export default {
   watch: {
     data () {
       this.initData()
-    },
-
-    id (data) {
-      console.log('data', data)
     }
   },
 
@@ -256,6 +252,7 @@ export default {
       this.form = {
         ...this.data
       }
+      this.total = this.data.dap_ans ? this.data.dap_ans.length : 0
       this.loading = false
     },
 

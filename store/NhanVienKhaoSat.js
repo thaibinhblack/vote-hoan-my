@@ -35,5 +35,24 @@ export const actions = {
         reject(err)
       })
     })
+  },
+
+  checkPhienBan ({ dispatch }, payload)  {
+    return new Promise((resolve, reject) => {
+      dispatch('root/setLoading', true, { root: true })
+      this.$voteSafe.nhanvienks.apiCheckPhienBan(payload)
+      .then((res) => {
+        dispatch('root/setLoading', false, { root: true })
+        if (res.data.code === 200) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        dispatch('root/setLoading', false, { root: true })
+        reject(err)
+      })
+    })
   }
 }

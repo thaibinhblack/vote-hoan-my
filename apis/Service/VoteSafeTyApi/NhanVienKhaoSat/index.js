@@ -8,6 +8,10 @@ export default function makeServices(axios) {
 
     apiGetNhanVienKhaoSat (params) {
       return axios.get(`${SERVICE}`, { params })
+    },
+
+    apiCheckPhienBan (params) {
+      return axios.get(`${SERVICE}/check`, { params })
     }
   }
 }

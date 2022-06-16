@@ -236,7 +236,7 @@ export default {
       this.dataEdit = {
         ...data
       }
-      this.title = `Cập nhật ${data.tieude_khaosat}`
+      this.title = `Cập nhật ${data.tieu_de_khao_sat}`
       this.open = true
     },
 
@@ -247,7 +247,8 @@ export default {
         ...data
       }
       this.$router.push({
-        path: 'KhaoSat',
+        //thường vue e chỉ dugnf name
+        path: this.localePath('KhaoSat'),
         query: {
           id: this.data.phien_ban_id
         }
@@ -331,7 +332,14 @@ export default {
       }
     },
 
-    onPreview () {},
+    onPreview (data) {
+      this.$router.push({
+        path: this.localePath('StepForm'),
+        query: {
+          id: data.phien_ban_id
+        }
+      })
+    },
 
     handleReset () {
       this.initData()
