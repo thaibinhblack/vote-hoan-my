@@ -50,7 +50,7 @@
             />
           </v-radio-group>
           <v-text-field
-            v-if="answer === 99"
+            v-if="value_dap_an === 99"
             v-model="text"
           />
         </ul>
@@ -105,6 +105,16 @@ export default {
     id: {
       type: Number,
       default: 0
+    },
+
+    data: {
+      type: Object,
+      default: () => ({})
+    },
+
+    label: {
+      type: String,
+      default: ''
     }
   },
 
@@ -123,9 +133,8 @@ export default {
       },
 
       set (data) {
-        console.log('set data', data, this.value)
         this.$emit('input', {
-          ...this.value,
+            ...this.value,
           value_other: data
         })
       }
@@ -133,20 +142,31 @@ export default {
 
     showQuestion () {
       return this.question ? (Object.entries(this.question).length > 0) : false
+    },
+
+    value_dap_an () {
+      if (this.question.answers) {
+        const dapan = this.question.answers.find(item => item.value === this.answer)
+        return dapan ? dapan.value_dap_an : 0
+      }
+      return 0
     }
   },
 
   watch: {
     value (data) {
+      console.log('value', data)
       this.answer = data.value
     },
 
     answer (value) {
       this.$emit('input', {
+        ...this.data,
         ...this.value,
         value,
         value_other: '',
-        id: this.id
+        value_dap_an: this.value_dap_an,
+        dap_an_id: value
       })
     }
   },

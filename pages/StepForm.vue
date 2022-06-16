@@ -22,8 +22,12 @@
       </div>
     </div>
 
-    <div class="step-form-khao-sat__not-foud">
-      <h3>Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!</h3>
+    <div
+      v-else
+      class="step-form-khao-sat__not-foud"
+    >
+      <h3 v-if="Object.entries(ketqua).length === 0">Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!</h3>
+      <h3 v-else>Bạn đã hoàn thành khỏa sát</h3>
     </div>
     
   </div>
@@ -51,7 +55,8 @@
     phanCauHois: [],
     dapans: [],
     loading: false,
-    checkUser: false
+    checkUser: false,
+    ketqua: {}
   }),
 
   computed: {
@@ -75,7 +80,15 @@
         phien_ban_id: this.$route.query.id
       }).then((res) => {
         this.checkUser = true
-        this.fetchPhienBanKhaoSat()
+        if (res.data.ket_qua_khao_sat.ket_qua_id === 0) {
+          this.fetchPhienBanKhaoSat()
+        } else {
+          this.checkUser = false
+          this.ketqua = {
+            ...res.data.ket_qua_khao_sat
+          }
+        }
+        this.loading = false
       })
       .catch(() => {
         this.$message({
