@@ -181,7 +181,7 @@ export default {
             "getMenuLeftByPhanQuyenId",
             this.user.phan_quyen_id
           );
-          await this.$router.push(this.localePath("/"));
+          await this.$router.push(this.localePath("/admin"));
           await this.$store.dispatch("connect");
 
           this.$store.commit("SET_LOADING", false);
