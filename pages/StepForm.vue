@@ -3,24 +3,39 @@
     v-loading="loading"
     class="step-form-khao-sat"
   >
-    <step-form
-      v-if="data.status_khao_sat === 1"
-      :data="data"
-      :phanCauHois="phanCauHois"
-      :dapans="dapans"
-    />
+    <div
+      v-if="checkUser"
+      class="step-form-khao-sat__container"
+    >
+      <step-form
+        v-if="data.status_khao_sat === 1"
+        :data="data"
+        :phanCauHois="phanCauHois"
+        :dapans="dapans"
+      />
+
+      <div
+        v-else
+        class="step-form-khao-sat__modal"
+      >
+        Phiên bản khảo sát đã ngưng hoạt động
+      </div>
+    </div>
 
     <div
       v-else
-      class="step-form-khao-sat__modal"
+      class="step-form-khao-sat__not-foud"
     >
-      Phiên bản khảo sát đã ngưng hoạt động
+      <h3 v-if="Object.entries(ketqua).length === 0">Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!</h3>
+      <h3 v-else>Bạn đã hoàn thành khỏa sát</h3>
     </div>
+    
   </div>
 </template>
 
  <script>
  import {
+  mapGetters,
   mapActions
  } from 'vuex'
 
@@ -38,24 +53,63 @@
   data: () => ({
     data: {},
     phanCauHois: [],
-    dapans: []
+    dapans: [],
+    loading: false,
+    checkUser: false,
+    ketqua: {}
   }),
 
+  computed: {
+    ...mapGetters(['user'])
+  },
+
   created () {
-    this.fetchPhienBanKhaoSat()
+    this.checkNhanVienKhaoSat()
   },
 
   methods: {
     ...mapActions('phienBanKhaoSat', ['fetchKhaoSatById']),
     ...mapActions('phanCauHoi', ['fetchPhanCauHoi']),
     ...mapActions('dapanCauHoi', ['queryDapAn']),
+    ...mapActions('NhanVienKhaoSat', ['checkPhienBan']),
+
+    checkNhanVienKhaoSat () {
+      console.log('i18n', this.$i18n.localeProperties.code)
+      this.loading = true
+      this.checkPhienBan({
+        tai_khoan_id: this.user.tai_khoan_id,
+        phien_ban_id: this.$route.query.id
+      }).then((res) => {
+        this.checkUser = true
+        if (res.data.ket_qua_khao_sat.ket_qua_id === 0) {
+          this.fetchPhienBanKhaoSat()
+        } else {
+          this.checkUser = false
+          this.ketqua = {
+            ...res.data.ket_qua_khao_sat
+          }
+        }
+        this.loading = false
+      })
+      .catch(() => {
+        this.$message({
+          type: 'warning',
+          message: `Tài khoản của bạn chưa được tham gia khảo sát phiên bản này!`
+        })
+        this.checkUser = false
+        this.loading = false
+      })
+    },
 
     fetchPhienBanKhaoSat () {
       if (!this.$route.query.id) {
         this.$router.back()
       } else {
         this.loading = true
-        this.fetchKhaoSatById(this.$route.query.id)
+        this.fetchKhaoSatById({
+          id: this.$route.query.id,
+          language: this.$i18n.localeProperties.code
+        })
         .then((res) => {
           this.data = {
             ...res
@@ -92,8 +146,12 @@
  </script>
 
  <style lang="scss">
+  .page-wrapper {
+    height: 100%;
+  }
   .step-form-khao-sat {
     position: relative;
+    height: 100%;
   
     &__modal {
       position: absolute;
@@ -107,6 +165,11 @@
       border-radius: 10px;
       font-size: 22px;
       border: 1px solid #e2e2e2;
+    }
+
+    &__not-foud {
+      padding: 100px 50px;
+      text-align: center;
     }
   }
  </style>

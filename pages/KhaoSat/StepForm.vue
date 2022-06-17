@@ -15,6 +15,7 @@
           :key="idx"
           :class="['step-form__item --border', `index-${index}`]"
           :id="item.id"
+          :data="item"
           v-bind="item"
           v-model="answers[index][idx]"
         />  
@@ -151,6 +152,7 @@ export default {
 
   computed: {
     ...mapState('dapanCauHoi', ['dapan']),
+    ...mapGetters(['user']),
 
     stepsCauHoi () {
       return this.phanCauHois.reduce((arr, key, idx) => ([
@@ -170,18 +172,28 @@ export default {
           ...key.cau_hois.reduce((arr, key_cau_hois) => ([
             ...arr,
             {
-              id: key_cau_hois.cau_hoi_id,
-              stt: key_cau_hois.stt_cau_hoi,
+              cau_hoi_id: key_cau_hois.cau_hoi_id,
+              stt_cau_hoi: key_cau_hois.stt_cau_hoi,
+              ten_cau_hoi: key_cau_hois.ten_cau_hoi,
+              switch_cau_hoi: key_cau_hois.switch_cau_hoi,
+              phien_ban_id: key.phien_ban_id,
+              phan_cau_hoi_id: key.phan_cau_hoi_id,
+              switch_phan_cau_hoi: key.switch_phan_cau_hoi,
+              ten_phan_cau_hoi: key.ten_phan_cau_hoi,
+              gia_tri_phan_cau_hoi: key.gia_tri_phan_cau_hoi,
+              language: key.language,
               question: {
                 number: key_cau_hois.stt_cau_hoi,
                 title: key_cau_hois.ten_cau_hoi,
                 answers: [
                   ...this.dapans.filter((item) => item.cau_hoi_id === key_cau_hois.cau_hoi_id)
-                  .reduce((arr, key) => ([
+                  .reduce((arr, key_dapan) => ([
                     ...arr,
                     {
-                      label: key.ten_dap_an,
-                      value: key.dap_an_id
+                      switch_dap_an: key_dapan.switch_dap_an,
+                      label: key_dapan.ten_dap_an,
+                      value: key_dapan.dap_an_id,
+                      value_dap_an: key_dapan.value_dap_an
                     }
                   ]), [])
                 ]
@@ -251,6 +263,7 @@ export default {
     ...mapActions('cauHoi', ['fetchListCauhoi']),
     ...mapActions('phienBanKhaoSat', ['fetchKhaoSatById']),
     ...mapActions('dapanCauHoi', ['fetchDapAn']),
+    ...mapActions('ketQua', ['saveKetQua']),
 
     initData () {
       this.stepActive = 0
@@ -338,6 +351,27 @@ export default {
       } else {
         this.stepActive = (this.steps.length + 1)
         this.send = true
+        const ketqua = answers.reduce((arr, key) => {
+          if (key && key.length > 0) {
+            arr = [
+              ...arr,
+              [
+                ...key.filter((item) => item !== null)
+              ]
+            ]
+          } else arr = [...arr]
+          return arr
+        }, [])
+        console.log('ket qua ', ketqua)
+        const data = JSON.stringify(ketqua)
+        this.saveKetQua({
+          tai_khoan_id: this.user.tai_khoan_id,
+          nhan_vien_id: this.user.nhan_vien_id,
+          phien_ban_id: this.data.phien_ban_id,
+          ket_qua: data
+        }).then((res) => {
+          console.log('res', res)
+        })  
       }
     }
   }

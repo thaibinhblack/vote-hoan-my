@@ -139,13 +139,13 @@
           {{ language === 'vi' ? 'Gỡ bỏ' : 'Remove' }}
         </el-button>
       </div>
-  
     <m-form-dap-an
       :title="title"
       v-model="open"
       :data="dataAnswer"
       :cauhoi="form"
       @submit="total = $event"
+      :language="language"
     />
   </div>
 </template>
@@ -173,6 +173,11 @@ export default {
     id: {
       type: [Number, String],
       default: null
+    },
+
+    phienban: {
+      type: Object,
+      default: () => ({})
     },
 
     phancauhoi: {
@@ -237,10 +242,6 @@ export default {
   watch: {
     data () {
       this.initData()
-    },
-
-    id (data) {
-      console.log('data', data)
     }
   },
 
@@ -254,8 +255,11 @@ export default {
     initData () {
       this.loading = true
       this.form = {
-        ...this.data
+        ...this.data,
+        switch_phien_ban: this.phienban.switch_phien_ban,
+        phien_ban_id: this.phienban.phien_ban_id
       }
+      this.total = this.data.dap_ans ? this.data.dap_ans.length : 0
       this.loading = false
     },
 
@@ -267,8 +271,8 @@ export default {
         phan_cau_hoi_id: vm.phancauhoi.phan_cau_hoi_id,
         switch_phan_cau_hoi: vm.phancauhoi.switch_phan_cau_hoi,
         stt_cau_hoi: parseInt(vm.form.stt_cau_hoi),
-        phien_ban_id: vm.phancauhoi.phien_ban_id,
-        switch_phien_ban: vm.phancauhoi.switch_phien_ban
+        phien_ban_id: vm.phienban.phien_ban_id,
+        switch_phien_ban: vm.phienban.switch_phien_ban
       }
       vm.$refs[`form-cau-hoi-${vm.index}`].validate(async (valid) => {
         if (valid) {
@@ -356,8 +360,15 @@ export default {
     },
 
     showAnswer () {
-      this.title = `Đáp án câu hỏi ${this.data.ten_cau_hoi}`
-      this.open = true
+      if (this.form.cau_hoi_id) {
+        this.title = `Đáp án câu hỏi ${this.form.ten_cau_hoi}`
+        this.open = true
+      } else {
+        this.$message({
+          type: 'warning',
+          message: `Bạn chưa lưu lại câu hỏi ${this.form.ten_cau_hoi || ''}!`
+        })
+      }
     },
 
     handleChangeSTT () {

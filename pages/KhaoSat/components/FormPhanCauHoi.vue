@@ -159,6 +159,7 @@
             :phancauhoi="form"
             :language="language"
             @reset="handleReset"
+            :phienban="phienban"
           />
           <div class="col-12 form-phan-cau-hoi__footer">
              <el-button
@@ -174,6 +175,7 @@
             </el-button>
 
             <el-button
+              v-if="language === 'vi'"
               class="form-phan-cau-hoi__btn-action"
               plain
               type="primary"
@@ -195,12 +197,14 @@ import {
   mapActions
 } from 'vuex'
 import FormCauHoi from './FormCauHoi.vue'
+import BaseEditor from '@/components/Editor/BaseEditor.vue'
 
 export default {
   name: 'FormPhanCauHoi',
 
   components: {
-    FormCauHoi
+    FormCauHoi,
+    BaseEditor
   },
 
   props: {

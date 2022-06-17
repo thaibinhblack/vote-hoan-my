@@ -27,6 +27,7 @@
               :key="index"
               :data="item"
               :phienban="form"
+              :language="tabActive"
               @remove="onRemove($event, index)"
             />
           </div>
@@ -67,6 +68,7 @@
 
     <div class="detail-khao-sat__footer">
       <el-button
+        v-if="tabActive === 'vi'"
         type="primary"
         plain
         @click="addPhanCauHoi"
@@ -134,7 +136,10 @@ export default {
 
     initData (id) {
       this.loading = true
-      this.fetchKhaoSatById(id)
+      this.fetchKhaoSatById({
+        id: id,
+        language: this.$i18n.localeProperties.code
+      })
       .then((res) => {
         this.form = {
           ...res

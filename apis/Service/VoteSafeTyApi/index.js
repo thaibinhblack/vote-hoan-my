@@ -5,7 +5,7 @@ import NhanVienKhaoSat from './NhanVienKhaoSat'
 import PhanCauHoi from './PhanCauHoi'
 import CauHoi from './CauHoi'
 import DapAn from './DapAn'
-
+import KetQua from './KetQua'
 
 export default function VoteSafeServices (axios) {
   return {
@@ -14,6 +14,7 @@ export default function VoteSafeServices (axios) {
     nhanvienks: NhanVienKhaoSat(axios),
     phancauhoi: PhanCauHoi(axios),
     cauhoi: CauHoi(axios),
-    dapan: DapAn(axios)
+    dapan: DapAn(axios),
+    ketqua: KetQua(axios)
   }
 }

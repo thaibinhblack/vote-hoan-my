@@ -24,7 +24,9 @@ export default {
     ],
     link: [
       {rel: "icon", type: "image/x-icon", href: "/favicon.ico"},
-      {rel: 'stylesheet', href: '/libs/stimulsoft/css/stimulsoft.viewer.office2013.whiteblue.css'}
+      {rel: 'stylesheet', href: '/libs/stimulsoft/css/stimulsoft.viewer.office2013.whiteblue.css'},
+      {rel: 'stylesheet', href: 'https://cdn3.devexpress.com/jslib/21.2.7/css/dx.common.css'},
+      {rel: 'stylesheet', href: 'https://cdn3.devexpress.com/jslib/21.2.7/css/dx.material.teal.dark.css'}
     ],
     script: [
       // {
@@ -90,7 +92,8 @@ export default {
     'nuxt-i18n',
     "@nuxtjs/axios",
     "@nuxtjs/auth-next",
-    '@nuxtjs/composition-api/module'
+    '@nuxtjs/composition-api/module',
+    'vue2-editor/nuxt'
   ],
   i18n: {
     locales: [

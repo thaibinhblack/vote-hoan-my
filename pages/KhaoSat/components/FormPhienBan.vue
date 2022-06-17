@@ -6,7 +6,7 @@
       ref="form-phien-ban"
       :model="form"
       :rules="rules"
-    >
+    > 
       <div
         class="form-phien-ban__item"
       >
@@ -74,21 +74,23 @@
               placeholder="Select date and time"
             />
           </el-form-item>
+
+          <el-form-item
+            class="col-12"
+            prop="mo_ta_khao_sat"
+          >
+            <p>
+              {{ language === 'vi'
+              ? 'Mô tả'
+              : 'Description' }}
+            </p>
+            <vue-editor
+              class="form-phien-ban__description"
+              v-model="form.mo_ta_khao_sat"
+            />
+          </el-form-item>
         </div>
 
-        <el-form-item
-          prop="mo_ta_khao_sat"
-          :label="language === 'vi'
-            ? 'Mô tả'
-            : 'Description'
-          "
-        >
-          <el-input
-            v-model="form.mo_ta_khao_sat"
-            type="textarea"
-            :rows="3"
-          />
-        </el-form-item>
 
         <el-form-item
           prop="noi_dung_khao_sat"
@@ -147,9 +149,15 @@ import {
   mapState,
   mapActions
 } from 'vuex'
+import { VueEditor, Quill } from "vue2-editor"
 
 export default {
   name: 'FormPhienBan',
+
+  components: {
+      VueEditor,
+    Quill
+  },
 
   props: {
     data: {
@@ -286,6 +294,10 @@ export default {
   &__select {
     display: block;
     width: 100%;
+  }
+
+  &__description {
+    display: block;
   }
 
   .el-date-editor {
