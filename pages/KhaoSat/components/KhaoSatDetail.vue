@@ -41,7 +41,7 @@
         <p>Nội dung</p>
         <vue-editor
           class="form-phien-ban__description"
-          v-model="form.mo_ta_khao_sat"
+          v-model="form.noi_dung_khao_sat"
         />
       </el-form-item>
 
