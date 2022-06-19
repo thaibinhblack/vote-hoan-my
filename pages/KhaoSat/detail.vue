@@ -219,27 +219,42 @@ export default {
     },
 
     addPhanCauHoi () {
-      const active = this.dataPhanCauHoi[this.dataPhanCauHoi.length - 1].gia_tri_phan_cau_hoi
+      const active = this.dataPhanCauHoi.length > 0 ? this.dataPhanCauHoi[this.dataPhanCauHoi.length - 1].gia_tri_phan_cau_hoi :   ''
       if(active) {
         this.dataPhanCauHoi = [
         ...this.dataPhanCauHoi,
           {
             language: this.tabActive,
             phien_ban_id: this.form.phien_ban_id,
-            status_phan_cau_hoi: 1
+            status_phan_cau_hoi: 1,
+            gia_tri_phan_cau_hoi: ''
           }
         ]
       } else {
-        this.activePhanCauHoi = active
-        this.$message({
-          type: 'warning',
-          message: 'Bạn chưa lưu phần câu hỏi này!'
-        })
+        if (this.dataPhanCauHoi.length === 0) {
+          this.dataPhanCauHoi = [
+          ...this.dataPhanCauHoi,
+            {
+              language: this.tabActive,
+              phien_ban_id: this.form.phien_ban_id,
+              status_phan_cau_hoi: 1,
+              gia_tri_phan_cau_hoi: ''
+            }
+          ]
+          this.activePhanCauHoi = ''
+        } else {
+          this.activePhanCauHoi = active
+          this.$message({
+            type: 'warning',
+            message: 'Bạn chưa lưu phần câu hỏi này!'
+          })
+        }
       }
     },
 
     handleTabPhanCauHoi (data) {
-      this.activePhanCauHoi = data.gia_tri_phan_cau_hoi
+      console.log('data', data)
+      this.activePhanCauHoi = data ? data.gia_tri_phan_cau_hoi : ''
     }
   }
 

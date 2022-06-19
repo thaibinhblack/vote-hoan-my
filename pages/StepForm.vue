@@ -2,7 +2,7 @@
   <div
     v-loading="loading"
     class="step-form-khao-sat"
-  >     
+  >
     <div
       class="step-form-khao-sat__container"
     >
@@ -15,8 +15,9 @@
         :ketqua="ketqua"
       />
 
+
       <div
-        v-if="checkUser"
+        v-if="checkUser && !preview"
         class="step-form-khao-sat__modal"
       >
         <div
@@ -56,11 +57,15 @@
     dapans: [],
     loading: false,
     checkUser: false,
-    ketqua: {}
+    ketqua: []
   }),
 
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user']),
+
+    preview () {
+      return this.$route.query.preview
+    }
   },
 
   created () {
@@ -83,10 +88,11 @@
           this.checkUser = false
         } else {
           this.checkUser = true
-          this.ketqua = {
+          this.ketqua = [
             ...res.data.ket_qua_khao_sat.ket_qua
-          }
+          ]
         }
+
         this.loading = false
       })
       .catch(() => {

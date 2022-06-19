@@ -47,6 +47,7 @@
               :key="index"
               :label="answer.label"
               :value="answer.value"
+              :disabled="preview"
             />
           </v-radio-group>
           <v-text-field
@@ -57,7 +58,7 @@
 
         <div class="box-form__remove-answer">
           <span
-            v-if="!!answer"
+            v-if="!!answer && !preview"
             @click="onRemove"
             class="box-form__btn-remove"
           >
@@ -150,32 +151,42 @@ export default {
         return dapan ? dapan.value_dap_an : 0
       }
       return 0
+    },
+
+    preview () {
+      return this.$route.query.preview
     }
   },
 
   watch: {
     value (data) {
-      console.log('value', data)
       this.answer = data.value
     },
 
     answer (value) {
-      const data = this.question.answers.find((item) => item.value === value)
-      this.$emit('input', {
-        ...this.data,
-        ...this.value,
-        value,
-        value_other: '',
-        value_dap_an: this.value_dap_an,
-        dap_an_id: value,
-        label: data.label
-      })
+      const data = this.question.answers ? this.question.answers.find((item) => item.value === value) : null
+      
+      if (data) {
+        this.$emit('input', {
+          ...this.data,
+          ...this.value,
+          value,
+          value_other: '',
+          value_dap_an: this.value_dap_an,
+          dap_an_id: value,
+          label: data.label
+        })
+      }
     }
   },
 
   data: () => ({
     answer: ''
   }),
+
+  created () {
+    this.answer = this.value.value || ''
+  },
 
   methods: {
     onRemove () {

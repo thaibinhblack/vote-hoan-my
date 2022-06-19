@@ -55,7 +55,7 @@
     
         <button
           @click="onNext"
-          v-if="stepActive < steps.length && !check"
+          v-if="stepActive < steps.length"
           class="step-form__action"
         >
           Tiếp
@@ -63,7 +63,7 @@
 
         <button
           @click="onSubmit"
-          v-if="stepActive === steps.length"
+          v-if="stepActive === steps.length && !check"
           class="step-form__action --success"
         >
           Nộp bài
@@ -262,7 +262,44 @@ export default {
 
   watch: {
     ketqua (data) {
-      console.log(this.answers, data)
+
+      data.forEach((item, index) => {
+        if (!this.answers[index + 1]) this.answers = [
+          ...this.answers,
+          []
+        ]
+        this.answers = [  
+          ...this.answers.reduce((arr, key, idx) => {
+            if ((index + 1) !== idx)  arr = [
+              ...arr,
+             [
+              ...key
+             ]
+            ]
+            else {
+              arr = [ 
+                ...arr,
+                [
+                  [],
+                  ...item.cau_hois.reduce((arr, key) => ([
+                    ...arr,
+                    {
+                      ...key,
+                      label: key.ket_qua.ten_cau_hoi,
+                      value: key.ket_qua.dap_an_id
+                    }
+                  ]), [])
+                ]
+              ]
+            }
+            return arr
+          }, [])
+        ]
+      })
+    },
+
+    answers (data) {
+      console.log('answers', data)
     }
   },
 
@@ -288,17 +325,8 @@ export default {
     },
 
     onNext () {
-      if (!this.check) {
-        const max = this.steps.length
-
-        this.stepActive = this.stepActive === max ? this.stepActive : (this.stepActive + 1)
-      } else {
-        this.$message({
-          type: 'warning',
-          message: 'Bạn đã hoàn thành phiên bản khảo sát này!'
-        })
-      }
-      
+      const max = this.steps.length
+      this.stepActive = this.stepActive === max ? this.stepActive : (this.stepActive + 1)
     },
 
     onBack () {
@@ -344,14 +372,7 @@ export default {
     },
 
     handleStep (index) {
-      if (!this.check) {
-        if (!this.send) this.stepActive = index + 1
-      } else {
-        this.$message({
-          type: 'warning',
-          message: 'Bạn đã hoàn thành khảo sát không thể tiếp tục!'
-        })
-      }
+      if (!this.send) this.stepActive = index + 1
     },
 
     onSubmit () {
@@ -419,6 +440,14 @@ export default {
             }
           ]), [])
         ]
+
+        if (this.check) {
+          this.$message({
+            message: 'Bạn đã hoàn thành khảo sát không thể tiếp tục thao tác này!',
+            type: 'warning'
+          })
+          return
+        }
 
         this.$confirm("Bạn có muốn lưu lại kết quả?")
         .then(() => {

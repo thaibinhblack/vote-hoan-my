@@ -100,6 +100,14 @@ export default {
           type: 'warning',
           message: `Nhân viên ${data.ten_nhan_vien} chưa hoàn thành khảo sát!`
         })
+      } else {
+        this.$router.push({
+          path: this.localePath('StepForm'),
+          query: {
+            id: this.$route.query.id,
+            preview: true
+          }
+        })
       }
     }
   }
