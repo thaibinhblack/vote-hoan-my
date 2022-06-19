@@ -96,11 +96,12 @@
         this.loading = false
       })
       .catch(() => {
+        console.log('catch',this.preview)
         this.$message({
           type: 'warning',
           message: `Tài khoản của bạn chưa được tham gia khảo sát phiên bản này!`
         })
-        this.checkUser = false
+        this.checkUser = true 
         this.loading = false
       })
     },

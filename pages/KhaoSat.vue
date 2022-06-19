@@ -343,7 +343,8 @@ export default {
       this.$router.push({
         path: this.localePath('StepForm'),
         query: {
-          id: data.phien_ban_id
+          id: data.phien_ban_id,
+          preview: data.status_khao_sat === 2
         }
       })
     },
