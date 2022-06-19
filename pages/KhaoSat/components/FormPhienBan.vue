@@ -7,7 +7,17 @@
       :model="form"
       :rules="rules"
     > 
+      <div class="row">
+        <div class="col-12 form-phien-ban__close">
+          <el-button @click="handleClose">
+              <v-icon>
+              {{ close ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+              </v-icon>
+          </el-button>
+        </div>
+      </div>
       <div
+        v-if="close"
         class="form-phien-ban__item"
       >
         <div class="row">
@@ -25,6 +35,7 @@
                 ? 'Nhập tiêu đề khảo sát'
                 : 'Please input title'
               "
+              :disabled="disabled"
             />
           </el-form-item>
 
@@ -39,6 +50,7 @@
             <el-select
               class="form-phien-ban__select"
               v-model="form.status_khao_sat"
+              :disabled="disabled"
             >
               <el-option
                 v-for="({ label, value }, index) in status"
@@ -60,6 +72,7 @@
                 ? 'Nhập url khao sát'
                 : 'Please input url vote'
               "
+              :disabled="disabled"
             />
           </el-form-item>
 
@@ -72,6 +85,7 @@
               v-model="form.time_end"
               type="datetime"
               placeholder="Select date and time"
+              :disabled="disabled"
             />
           </el-form-item>
 
@@ -87,6 +101,7 @@
             <vue-editor
               class="form-phien-ban__description"
               v-model="form.mo_ta_khao_sat"
+              :disabled="disabled"
             />
           </el-form-item>
         </div>
@@ -94,20 +109,22 @@
 
         <el-form-item
           prop="noi_dung_khao_sat"
-          :label="language === 'vi'
-            ? 'Nội dung'
-            : 'Content'
-          "
         >
-          <el-input
-            v-model="form.noi_dung_khao_sat"
-            type="textarea"
-            :rows="3"
-          />
+          <p>
+              {{ language === 'vi'
+              ? 'Nội dung'
+              : 'Content' }}
+            </p>
+            <vue-editor
+              class="form-phien-ban__description"
+              v-model="form.noi_dung_khao_sat"
+              :disabled="disabled"
+            />
         </el-form-item>
       </div>
       <div class="form-phien-ban__action">
         <el-button
+          v-if="roles.save"
           plain
           type="primary"
           @click="onSubmit"
@@ -119,6 +136,7 @@
         </el-button>
 
         <el-button
+          v-if="roles.preview"
           plain
           type="success"
           @click="onPreview"
@@ -130,6 +148,7 @@
         </el-button>
 
         <el-button
+          v-if="roles.delete"
           plain
           type="danger"
           @click="onDelete"
@@ -160,6 +179,11 @@ export default {
   },
 
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+
     data: {
       type: Object,
       default: () => ({})
@@ -168,6 +192,15 @@ export default {
     language: {
       type: String,
       default: 'vi'
+    },
+
+    roles: {
+      type: Object,
+      default: () => ({
+        delete: true,
+        preview: true,
+        save: true
+      })
     }
   },
 
@@ -196,7 +229,8 @@ export default {
         }
       ]
     },
-    loading: false
+    loading: false,
+    close: true
   }),
 
   computed: {
@@ -242,11 +276,10 @@ export default {
 
     onPreview () {
       this.$router.push({
-        path: 'StepForm',
+        path: this.localePath('StepForm'),
         query: {
           id: this.form.phien_ban_id
-        },
-        blank: ''
+        }
       })
     },
 
@@ -276,6 +309,10 @@ export default {
         console.log('deletePhienBan', err)
         this.loading = false
       })
+    },
+
+    handleClose () {
+      this.close = !this.close
     }
   }
 }
@@ -308,6 +345,12 @@ export default {
       height: 40px;
       top: 40px
     }
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: right;
   }
 }
 </style>

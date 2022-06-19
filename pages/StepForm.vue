@@ -4,32 +4,33 @@
     class="step-form-khao-sat"
   >
     <div
-      v-if="checkUser"
       class="step-form-khao-sat__container"
     >
       <step-form
-        v-if="data.status_khao_sat === 1"
         :data="data"
         :phanCauHois="phanCauHois"
         :dapans="dapans"
+        @submit="checkNhanVienKhaoSat"
+        :check="checkUser"
+        :ketqua="ketqua"
       />
 
+
       <div
-        v-else
+        v-if="checkUser && !preview"
         class="step-form-khao-sat__modal"
       >
-        Phiên bản khảo sát đã ngưng hoạt động
+        <div
+          class="step-form-khao-sat__not-foud"
+        >
+          <h3 v-if="Object.entries(ketqua).length === 0">
+            Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!
+          </h3>
+          <h3 v-else>Bạn đã hoàn thành khỏa sát</h3>
+        </div>
       </div>
     </div>
 
-    <div
-      v-else
-      class="step-form-khao-sat__not-foud"
-    >
-      <h3 v-if="Object.entries(ketqua).length === 0">Tài khoản của bạn chưa được tham gia khảo sát, Xin vui lòng liên hệ với bộ phận IT để được tham gia khảo sát!</h3>
-      <h3 v-else>Bạn đã hoàn thành khỏa sát</h3>
-    </div>
-    
   </div>
 </template>
 
@@ -56,15 +57,19 @@
     dapans: [],
     loading: false,
     checkUser: false,
-    ketqua: {}
+    ketqua: []
   }),
 
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user']),
+
+    preview () {
+      return this.$route.query.preview
+    }
   },
 
   created () {
-    this.checkNhanVienKhaoSat()
+    this.fetchPhienBanKhaoSat()
   },
 
   methods: {
@@ -74,29 +79,29 @@
     ...mapActions('NhanVienKhaoSat', ['checkPhienBan']),
 
     checkNhanVienKhaoSat () {
-      console.log('i18n', this.$i18n.localeProperties.code)
       this.loading = true
       this.checkPhienBan({
         tai_khoan_id: this.user.tai_khoan_id,
-        phien_ban_id: this.$route.query.id
+        phien_ban_id: this.data.phien_ban_id
       }).then((res) => {
-        this.checkUser = true
         if (res.data.ket_qua_khao_sat.ket_qua_id === 0) {
-          this.fetchPhienBanKhaoSat()
-        } else {
           this.checkUser = false
-          this.ketqua = {
-            ...res.data.ket_qua_khao_sat
-          }
+        } else {
+          this.checkUser = true
+          this.ketqua = [
+            ...res.data.ket_qua_khao_sat.ket_qua
+          ]
         }
+
         this.loading = false
       })
       .catch(() => {
+        console.log('catch',this.preview)
         this.$message({
           type: 'warning',
           message: `Tài khoản của bạn chưa được tham gia khảo sát phiên bản này!`
         })
-        this.checkUser = false
+        this.checkUser = true 
         this.loading = false
       })
     },
@@ -129,6 +134,8 @@
               ...res.data
             ]
           })
+
+          this.checkNhanVienKhaoSat()
           this.loading = false
         })
         .catch(() => {
@@ -160,7 +167,7 @@
       top: 50%;
       left: 50%;
       background-color: #fff;
-      padding: 100px 50px;
+      padding: 25px;
       transform: translate(-50%, -50%);
       border-radius: 10px;
       font-size: 22px;
@@ -168,8 +175,9 @@
     }
 
     &__not-foud {
-      padding: 100px 50px;
+      padding: 50px;
       text-align: center;
+      opacity: .8;
     }
   }
  </style>

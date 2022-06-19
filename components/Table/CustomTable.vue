@@ -32,7 +32,10 @@
             :class="[item.class, formatData(item.format, row[item.column]).class || '']"
             v-else
           >
-            {{ formatData(item.format, row[item.column]).label || formatData(item.format, row[item.column]) }}
+            <span v-if="item.format.type === 'html'" v-html="formatData(item.format, row[item.column])"></span>
+            <span v-else>
+              {{ formatData(item.format, row[item.column]).label || formatData(item.format, row[item.column]) }}
+            </span>
           </div>
         </template>
       </el-table-column>
@@ -50,6 +53,7 @@
         </template>
         <template slot-scope="{row}">
           <button
+            v-if="roles.edit"
             class="custom-table__btn-action"
             @click="onEdit(row)"
             :title="$t('components.CustomTable.edit')"
@@ -60,6 +64,7 @@
           </button>
 
           <button
+            v-if="roles.delete"
             class="custom-table__btn-action"
             @click="onDelete(row)"
             :title="$t('components.CustomTable.delete')"
@@ -109,6 +114,14 @@ export default {
     selected: {
       type: Array,
       default: () => ([])
+    },
+
+    roles: {
+      type: Object,
+      default: () => ({
+        delete: true,
+        edit: true
+      })
     }
   },
 

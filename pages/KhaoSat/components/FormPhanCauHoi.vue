@@ -208,6 +208,11 @@ export default {
   },
 
   props: {
+    value: {
+      type: Object,
+      default: () => ({})
+    },
+
     data: {
       type: Object,
       default: () => ({})
@@ -225,7 +230,6 @@ export default {
   },
 
   data: () => ({
-    form: {},
     rules: {
       ten_phan_cau_hoi: [
         {
@@ -258,17 +262,16 @@ export default {
   }),
 
   computed: {
-    ...mapState('phanCauHoi', ['types', 'status'])
-  },
+    ...mapState('phanCauHoi', ['types', 'status']),
 
-  watch: {
-    data (data) {
-      this.form = {
-        ...data
+    form: {
+      get () {
+        return this.value
+      },
+
+      set (val) {
+        this.$emit('input', val)
       }
-      this.list = [
-        ...data.cau_hois
-      ]
     }
   },
 

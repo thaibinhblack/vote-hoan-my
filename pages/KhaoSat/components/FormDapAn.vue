@@ -35,6 +35,7 @@
           class="col-12 col-md-4 col-xl-3"
           prop="value_dap_an"
           label="Giá trị đáp án"
+          :disabled="language === 'en'"
         >
           <el-input
             v-model="form.value_dap_an"
@@ -91,6 +92,11 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    },
+
+    language: {
+      type: String,
+      default: 'vi'
     }
   },
 

@@ -67,7 +67,7 @@
             <el-select
               v-model="form.status_khao_sat"
               class="khao-sat-detail__select"
-              :disabled="isDisabled"
+              :disabled="isDisabled || !isUpdate"
             >
               <el-option
                 v-for="({ label, value }, index) in status"

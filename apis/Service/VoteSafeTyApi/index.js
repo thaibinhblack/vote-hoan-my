@@ -6,6 +6,7 @@ import PhanCauHoi from './PhanCauHoi'
 import CauHoi from './CauHoi'
 import DapAn from './DapAn'
 import KetQua from './KetQua'
+import ThongKe from './PhienBanKhaoSat/thongke'
 
 export default function VoteSafeServices (axios) {
   return {
@@ -15,6 +16,7 @@ export default function VoteSafeServices (axios) {
     phancauhoi: PhanCauHoi(axios),
     cauhoi: CauHoi(axios),
     dapan: DapAn(axios),
-    ketqua: KetQua(axios)
+    ketqua: KetQua(axios),
+    thongke: ThongKe(axios)
   }
 }
