@@ -15,6 +15,7 @@
         :data="item"
         v-model="form[index]"
         @remove="handleRemove($event, index)"
+        :language="language"
       />
     </div>
 

@@ -160,13 +160,15 @@ export default {
     },
 
     answer (value) {
+      const data = this.question.answers.find((item) => item.value === value)
       this.$emit('input', {
         ...this.data,
         ...this.value,
         value,
         value_other: '',
         value_dap_an: this.value_dap_an,
-        dap_an_id: value
+        dap_an_id: value,
+        label: data.label
       })
     }
   },

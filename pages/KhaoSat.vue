@@ -31,8 +31,8 @@
               :columns="columns"
               :data="list"
               @edit="handleEdit"
-              @delete="handleDelete"
               :checkbox="true"
+              :roles="{delete: false, edit: true}"
             >
               <template #action="{ data }">
                 <button
@@ -49,6 +49,15 @@
                 >
                   <v-icon>mdi-eye</v-icon>
                 </button>
+
+                <button
+                  class="page-khao-sat__btn"
+                  title="Xem thống kê"
+                  @click="onChart(data)"
+                >
+                  <v-icon>mdi-chart-line-variant</v-icon>
+                </button>
+
                 <button
                   class="page-khao-sat__btn"
                   title="Chi tiết"
@@ -137,7 +146,8 @@ export default {
     data: {},
     rolesFields: {
       create: false,
-      delete: false
+      delete: false,
+      search: true
     },
     selection: [],
     settingUser: false,
@@ -291,25 +301,22 @@ export default {
 
     handleDelete (data) {
       if (data.status_khao_sat === 1) {
-        this.$confirm(`Bạn muốn tạm ngưng hoạt động phiên bản khảo sát: "${data.tieu_de_khao_sat}?"`)
+        this.loading = true
+        this.deletePhienBan({
+          phien_ban_id: data.phien_ban_id
+        })
         .then(() => {
-          this.loading = true
-          this.deletePhienBan({
-            phien_ban_id: data.phien_ban_id
+          this.$message({
+            type: 'success',
+            message: 'Cập nhật thành công'
           })
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: 'Cập nhật thành công'
-            })
-            this.loading = false
-          }).catch(() => {
-            this.$message({
-              type: 'warning',
-              message: this.$t('error.server')
-            })
-            this.loading = false
+          this.loading = false
+        }).catch(() => {
+          this.$message({
+            type: 'warning',
+            message: this.$t('error.server')
           })
+          this.loading = false
         })
       }
       else this.$message({
@@ -352,6 +359,29 @@ export default {
         ...data
       }
       this.initPhienBanKhaoSat(params)
+    },
+
+    onChart (data) {
+      this.loading = true
+      if (data.status_khao_sat === 1) {
+        this.$confirm(`Bạn có muốn đóng phiên bản khảo sát?`)
+        .then(async () => {
+          await this.handleDelete(data)
+          this.$router.push({
+            path: this.localePath('ThongKe'),
+            query: {
+              id: data.phien_ban_id
+            }
+          })
+        })
+      } else {
+        this.$router.push({
+          path: this.localePath('ThongKe'),
+          query: {
+            id: data.phien_ban_id
+          }
+        })
+      }
     }
   }
 }

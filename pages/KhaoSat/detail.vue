@@ -18,17 +18,51 @@
             />
           </div>
 
-          <div class="col-12">
+          <div class="col-12 detail-khao-sat__intro-phan-cau-hoi">
             <h3 class="detail-khao-sat__title">
               Phần câu hỏi:
             </h3>
+
+            <ul class="detail-khao-sat__list-phan-cau-hoi">
+              <li
+                v-for="(item, index) in dataPhanCauHoi"
+                :key="index"
+                :class="{
+                  'detail-khao-sat__item-phan-cau-hoi': true,
+                  '--active': item.gia_tri_phan_cau_hoi === activePhanCauHoi
+                }"
+                @click="handleTabPhanCauHoi(item)"
+              >
+                {{ item.gia_tri_phan_cau_hoi }}
+                <span class="detail-khao-sat__sup">
+                  {{ item.cau_hois ? item.cau_hois.length : 0 }}
+                </span>
+              </li>
+
+              <li
+                :class="{
+                  'detail-khao-sat__item-phan-cau-hoi --icon': true,
+                }"
+                @click="addPhanCauHoi()"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-12">
             <form-phan-cau-hoi
               v-for="(item, index) in dataPhanCauHoi"
+              v-model="dataPhanCauHoi[index]"
               :key="index"
               :data="item"
               :phienban="form"
               :language="tabActive"
               @remove="onRemove($event, index)"
+              :class="{
+                'detail-khao-sat__form-phan-cau-hoi': true,
+                '--active': item.gia_tri_phan_cau_hoi === activePhanCauHoi
+              }"
             />
           </div>
         </div>
@@ -65,18 +99,7 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-
-    <div class="detail-khao-sat__footer">
-      <el-button
-        v-if="tabActive === 'vi'"
-        type="primary"
-        plain
-        @click="addPhanCauHoi"
-      >
-        Thêm mới
-      </el-button>
-    </div>
-  </div>
+  </div>  
 </template>
 
 <script>
@@ -113,7 +136,8 @@ export default {
       ]
     },
     dataPhanCauHoi: [],
-    tabActive: 'vi'
+    tabActive: 'vi',
+    activePhanCauHoi: null
   }),
 
   watch: {
@@ -123,6 +147,13 @@ export default {
 
     '$route' () {
       this.initData(this.$route.query.id)
+    },
+
+    dataPhanCauHoi: {
+      deep: true,
+      handler(data) {
+        this.handleTabPhanCauHoi(data[data.length - 1])
+      }
     }
   },
 
@@ -188,14 +219,27 @@ export default {
     },
 
     addPhanCauHoi () {
-      this.dataPhanCauHoi = [
+      const active = this.dataPhanCauHoi[this.dataPhanCauHoi.length - 1].gia_tri_phan_cau_hoi
+      if(active) {
+        this.dataPhanCauHoi = [
         ...this.dataPhanCauHoi,
-        {
-          language: this.tabActive,
-          phien_ban_id: this.form.phien_ban_id,
-          status_phan_cau_hoi: 1
-        }
-      ]
+          {
+            language: this.tabActive,
+            phien_ban_id: this.form.phien_ban_id,
+            status_phan_cau_hoi: 1
+          }
+        ]
+      } else {
+        this.activePhanCauHoi = active
+        this.$message({
+          type: 'warning',
+          message: 'Bạn chưa lưu phần câu hỏi này!'
+        })
+      }
+    },
+
+    handleTabPhanCauHoi (data) {
+      this.activePhanCauHoi = data.gia_tri_phan_cau_hoi
     }
   }
 
@@ -229,6 +273,71 @@ export default {
 
     &__info {
       padding: 15px 0;
+    }
+
+    &__intro-phan-cau-hoi {
+      display: flex;
+      align-items: center;
+    }
+
+    &__list-phan-cau-hoi {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    &__item-phan-cau-hoi {
+      list-style: none;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      border: 1px solid #e2e2e2;
+      background-color: #fff;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 13px;
+      margin: 5px;
+      cursor: pointer;
+      position: relative;
+
+      &:hover, &.\--active {
+        background-color: #ccecff;
+        color: #333;
+
+        .detail-khao-sat__sup {
+          background-color: #fff;
+        }
+      }
+
+      &.\--icon {
+        i {
+          font-size: 13px;
+        }
+      }
+    }
+
+    &__form-phan-cau-hoi   {
+      display: none;
+
+      &.\--active {
+        display: block;
+      }
+    }
+
+    &__sup {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ccecff;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 1px solid #e2e2e2;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      font-size: 11px;
     }
   }
 </style>

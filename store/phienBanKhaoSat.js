@@ -3,15 +3,11 @@ export const state = () => ({
   list: [],
   status: [
     {
-      label: 'Tất cả trạng thái',
-      value: -1
-    },
-    {
-      label: 'Đang hoạt động',
+      label: 'Chưa đóng khảo sát',
       value: 1
     },
     {
-      label: 'Ngưng hoạt động',
+      label: 'Đóng khảo sát',
       value: 2
     }
   ],
@@ -38,11 +34,11 @@ export const state = () => ({
           value: -1
         },
         {
-          label: 'Đang hoạt động',
+          label: 'Chưa đóng khảo sát',
           value: 1
         },
         {
-          label: 'Ngưng hoạt động',
+          label: 'Đóng khảo sát',
           value: 2
         }
       ]
@@ -63,10 +59,20 @@ export const state = () => ({
     {
       label: 'Mô tả',
       column: 'mo_ta_khao_sat',
+      format: {
+        type: 'html'
+      }
     },
     {
       label: 'Nội dung',
       column: 'noi_dung_khao_sat',
+      format: {
+        type: 'html'
+      }
+    },
+    {
+      label: 'Số lượng nhân viên',
+      column: 'sl_nhan_vien_ks',
     },
     {
       label: 'Trạng thái',
@@ -76,12 +82,12 @@ export const state = () => ({
         type: 'data',
         data: [
           {
-            label: 'Đang hoạt động',
+            label: 'Chưa đóng khảo sát',
             value: 1,
             class: '--txt-success'
           },
           {
-            label: 'Ngưng hoạt động',
+            label: 'Đã đóng khảo sát',
             value: 2,
             class: '--txt-danger'
           }
@@ -99,7 +105,66 @@ export const state = () => ({
       width: 150
     }
   ],
-  pagination: {}
+  pagination: {},
+  thongke: {},
+  columnThongKe: [
+    {
+      label: '#',
+      column: 'index',
+      width: 80
+    },
+    {
+      label: 'Mã nhân viên',
+      column: 'ma_nhan_vien',
+      width: 120
+    },
+    {
+      label: 'Tên nhân viên',
+      column: 'ten_nhan_vien',
+    },
+    {
+      label: 'Email nhân viên',
+      column: 'email',
+    },
+    {
+      label: 'Giới tính',
+      column: 'gioi_tinh',
+      format: {
+        type: 'data',
+        data: [
+          {
+            label: 'Nam',
+            value: 1
+          },
+          {
+            label: 'Nữ',
+            value: 0
+          }
+        ]
+      },
+      width: 80
+    },
+    {
+      label: 'Trạng thái khảo sát',
+      column: 'status_khao_sat',
+      width: 120,
+      format: {
+        type: 'data',
+        data: [
+          {
+            label: 'Chưa hoàn thành',
+            value: 1,
+            class: '--txt-danger'
+          },
+          {
+            label: 'Đã hoàn thành',
+            value: 2,
+            class: '--txt-success'
+          }
+        ]
+      }
+    },
+  ]
 })
 
 export const getters = {
@@ -108,9 +173,23 @@ export const getters = {
       ...arr,
       {
         ...key,
-        index: index + 1
+        index: index + 1,
+        sl_nhan_vien_ks: `${key.nhan_vien_khao_sat.filter(item => item.status_khao_sat === 2).length} / ${key.nhan_vien_khao_sat.length}`
       }
     ]), [])
+  },
+
+  dataThongKe (state) {
+    return state.thongke.nhan_vien_khao_sat ? state.thongke.nhan_vien_khao_sat.reduce((arr, key, index) => ([
+      ...arr,
+      {
+        index: index + 1,
+        hospital_id: key.hospital_id,
+        status_khao_sat: key.status_khao_sat,
+        ...key.thong_tin_nhan_vien
+      }
+    ]), [])
+    : []
   }
 }
 
@@ -167,6 +246,12 @@ export const mutations = {
     state.list = [
       ...state.list.filter((item) => item.phienban_id !== payload.phienban_id)
     ]
+  },
+
+  SET_THONGKE: (state, payload) => {
+    state.thongke = {
+      ...payload
+    }
   }
 }
 
@@ -180,6 +265,9 @@ export const actions = {
   },
   setPagination: ({ commit }, payload) => {
     commit('SET_PAGINATION', payload)
+  },
+  setThongKe: ({ commit }, payload) => {
+    commit('SET_THONGKE', payload)
   },
 
   fetchKhaoSat: ({ dispatch }) => {
@@ -360,6 +448,33 @@ export const actions = {
   setNhanVienKhaoSat ({ dispatch }, payload)  {
     return new Promise(async(resolve, reject) => {
       
+    })
+  },
+
+  fetchThongKe ({ dispatch }, params) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch('root/setLoading', true, { root: true })
+        await this.$voteSafe.thongke
+        .apiGetThongKeKhaoSat(params)
+          .then((res) => {
+            
+            if(res.data.code === 200) {
+              dispatch('setThongKe', res.data.data)
+              resolve(res.data.data)
+            } else {
+              dispatch('root/setLoading', false, { root: true })
+              reject(res.data)
+            }
+          })
+          .catch((err) => {
+            dispatch('root/setLoading', false, { root: true })
+            reject(err)
+          })
+      } catch (error) {
+        dispatch('root/setLoading', false, { root: true })
+        reject(error)
+      }
     })
   }
 }

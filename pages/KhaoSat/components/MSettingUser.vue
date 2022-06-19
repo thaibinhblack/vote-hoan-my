@@ -248,10 +248,10 @@ export default {
             type: 'success',
             message: 'Cập nhật nhan viên khảo sát thành công'
           })
-        }).catch(() => {
+        }).catch((res) => {
           this.$message({
             type: 'warning',
-            message: 'Lôi! Xin vui lòng liên hệ với bộ phận IT để được hỗ trợ!'
+            message: res.message || this.$t('error.server')
           })
         })
     },

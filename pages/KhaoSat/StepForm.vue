@@ -55,7 +55,7 @@
     
         <button
           @click="onNext"
-          v-if="stepActive < steps.length"
+          v-if="stepActive < steps.length && !check"
           class="step-form__action"
         >
           Tiếp
@@ -105,7 +105,6 @@
 <script>
 import BoxForm from './components/BoxForm.vue'
 import {mapState, mapActions, mapGetters} from "vuex"
-import notify from "devextreme/ui/notify";
 
 export default {
   components: {
@@ -124,6 +123,16 @@ export default {
     },
 
     dapans: {
+      type: Array,
+      default: () => ([])
+    },
+
+    check: {
+      type: Boolean,
+      default: false
+    },
+
+    ketqua: {
       type: Array,
       default: () => ([])
     }
@@ -173,6 +182,7 @@ export default {
             ...arr,
             {
               cau_hoi_id: key_cau_hois.cau_hoi_id,
+              stt: key_cau_hois.stt_cau_hoi,
               stt_cau_hoi: key_cau_hois.stt_cau_hoi,
               ten_cau_hoi: key_cau_hois.ten_cau_hoi,
               switch_cau_hoi: key_cau_hois.switch_cau_hoi,
@@ -250,6 +260,12 @@ export default {
     }
   },
 
+  watch: {
+    ketqua (data) {
+      console.log(this.answers, data)
+    }
+  },
+
   created () {
     Promise.all([
       this.fetchListCauhoi(),
@@ -272,9 +288,17 @@ export default {
     },
 
     onNext () {
-      const max = this.steps.length
+      if (!this.check) {
+        const max = this.steps.length
 
-      this.stepActive = this.stepActive === max ? this.stepActive : (this.stepActive + 1)
+        this.stepActive = this.stepActive === max ? this.stepActive : (this.stepActive + 1)
+      } else {
+        this.$message({
+          type: 'warning',
+          message: 'Bạn đã hoàn thành phiên bản khảo sát này!'
+        })
+      }
+      
     },
 
     onBack () {
@@ -320,7 +344,14 @@ export default {
     },
 
     handleStep (index) {
-      if (!this.send) this.stepActive = index + 1
+      if (!this.check) {
+        if (!this.send) this.stepActive = index + 1
+      } else {
+        this.$message({
+          type: 'warning',
+          message: 'Bạn đã hoàn thành khảo sát không thể tiếp tục!'
+        })
+      }
     },
 
     onSubmit () {
@@ -344,10 +375,10 @@ export default {
       
 
       if (check) {
-        notify({
+        this.$message({
           message: 'Chưa hoàn thành hết câu hỏi',
-          top: true
-        }, 'warning', 3000)
+          type: 'warning'
+        })
       } else {
         this.stepActive = (this.steps.length + 1)
         this.send = true
@@ -362,17 +393,70 @@ export default {
           } else arr = [...arr]
           return arr
         }, [])
-        console.log('ket qua ', ketqua)
-        const data = JSON.stringify(ketqua)
-        this.saveKetQua({
-          tai_khoan_id: this.user.tai_khoan_id,
-          nhan_vien_id: this.user.nhan_vien_id,
-          phien_ban_id: this.data.phien_ban_id,
-          ket_qua: data
-        }).then((res) => {
-          console.log('res', res)
-        })  
+        
+        const data = [
+          ...this.phanCauHois.reduce((arr, key, index) => ([
+            ...arr,
+            {
+              phan_cau_hoi_id: key.phan_cau_hoi_id,
+              gia_tri_phan_cau_hoi: key.gia_tri_phan_cau_hoi,
+              ten_phan_cau_hoi: key.ten_phan_cau_hoi,
+              cau_hois: [
+                ...key.cau_hois.filter((item) => item.phan_cau_hoi_id === key.phan_cau_hoi_id)
+                .reduce((arr, cauhoi) => (
+                  [
+                    ...arr,
+                    {
+                      cau_hoi_id: cauhoi.cau_hoi_id,
+                      ten_cau_hoi: cauhoi.ten_cau_hoi,
+                      ket_qua: {
+                        ...this.FilterKetQua(cauhoi.cau_hoi_id, index)
+                      }
+                    }
+                  ]
+                ), [])
+              ]
+            }
+          ]), [])
+        ]
+
+        this.$confirm("Bạn có muốn lưu lại kết quả?")
+        .then(() => {
+          this.saveKetQua({
+            tai_khoan_id: this.user.tai_khoan_id,
+            nhan_vien_id: this.user.nhan_vien_id,
+            phien_ban_id: this.data.phien_ban_id,
+            ket_qua: data,
+            switch_phien_ban: this.data.switch_phien_ban,
+            language: this.$i18n.localeProperties.code  
+          }).then((res) => {
+            this.$message({
+              type: 'success',
+              message: 'Cảm ơn bạn đã tham gia cuộc khảo sát này!'
+            })
+            this.$emit('submit')
+          })  
+          
+        })
+        .catch(() => {
+          this.$message({
+            type: 'warning',
+            message: 'Xin vui lòng kiểm tra lại kết quả!'
+          })
+          this.stepActive = 0
+        })
       }
+    },
+
+    FilterKetQua (cau_hoi_id, index) {
+      const ketqua = this.answers[index + 1].find((item) => item && item.cau_hoi_id === cau_hoi_id)
+      if (ketqua) return {
+        dap_an_id: ketqua.value,
+        ten_dap_an: ketqua.label,
+        value_dap_an: ketqua.value_dap_an,
+        value_other: ketqua.value_other
+      }
+      return {}
     }
   }
 }
